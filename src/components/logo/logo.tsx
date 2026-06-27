@@ -59,10 +59,8 @@
 // export default Logo;
 
 import Link from '@mui/material/Link';
-import { useTranslations } from 'next-intl';
 import Box, { BoxProps } from '@mui/material/Box';
 import { RouterLink } from 'src/routes/components';
-import { Typography, TypographyProps } from '@mui/material';
 
 import SvgColor from '../svg-color';
 
@@ -70,13 +68,9 @@ import SvgColor from '../svg-color';
 
 export interface LogoProps extends BoxProps {
   disabledLink?: boolean;
-  enableText?: boolean;
-  textProps?: TypographyProps;
 }
 
-const Logo = ({ disabledLink = false, enableText = false, sx, textProps }: LogoProps) => {
-  const t = useTranslations();
-
+const Logo = ({ disabledLink = false, sx }: LogoProps) => {
   const logo = (
     <Box
       component="div"

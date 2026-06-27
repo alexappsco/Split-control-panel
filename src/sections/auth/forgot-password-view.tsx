@@ -77,7 +77,7 @@ export default function ForgotPasswordView() {
       )}
 
       {step === 3 && (
-        <NewPasswordStep onNextStep={handleNextStep} onBackStep={handleBackStep} token={token} />
+        <NewPasswordStep onNextStep={handleNextStep} onBackStep={handleBackStep} token={token} email={email} />
       )}
     </Box>
   );
@@ -222,8 +222,11 @@ function OtpStep({
     try {
       loading.onTrue();
       const response = await verifyOtp(email, data.otp);
-      setToken(response.accessToken);
+      setToken(response.token);
+      // console.log("response otp",response)
       onNextStep();
+      // console.log("response otp 1",response)
+
     } catch (error) {
       setErrorMsg(error.message);
       setValue('otp', '');
@@ -346,7 +349,8 @@ const ResendOtp = memo(({ email }: { email: string }) => {
   );
 });
 
-function NewPasswordStep({ onBackStep, token }: StepProps & { token: string }) {
+function NewPasswordStep({ onBackStep, token,email }: StepProps & { token: string ,email:string }) {
+
   const t = useTranslations();
   const router = useRouter();
   const loading = useBoolean();

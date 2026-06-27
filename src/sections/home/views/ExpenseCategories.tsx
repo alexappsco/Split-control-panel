@@ -106,8 +106,8 @@
 import {
   Box,
   Card,
-  LinearProgress,
   Typography,
+  LinearProgress,
 } from "@mui/material";
 
 interface ExpenseCategoriesProps {

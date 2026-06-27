@@ -26,7 +26,7 @@ export default function RHFDatePicker({
   } = useFormContext();
   const error = errors[name]?.message;
 
-  const { formateDate } = useFormat();
+  const { formatDate } = useFormat();
 
   const renderDatePicker = (
     <DatePicker
@@ -46,7 +46,7 @@ export default function RHFDatePicker({
         },
       }}
       onChange={(value: Dayjs | null): void => {
-        setValue(name, formateDate(value?.toDate(), 'yyyy-MM-dd') || '', { shouldValidate: true });
+        setValue(name, formatDate(value?.toDate(), 'yyyy-MM-dd') || '', { shouldValidate: true });
       }}
       label={defaultLabel ? label : undefined}
     />

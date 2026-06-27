@@ -1,17 +1,11 @@
 import { endpoints } from 'src/utils/endpoints';
 import { getTranslations } from 'next-intl/server';
 import { getData } from 'src/utils/crud-fetch-api';
-import { NoPermissionView } from 'src/sections/error';
-import { FetchTags } from 'src/actions/config-actions';
-import { DEFAULT_LIMIT } from 'src/components/constant';
 import HomeView from 'src/sections/home/views/list-view';
-import { Reports, SettingData, SalesRevenue, PurchasedProduct } from 'src/types/home';
 
 // ----------------------------------------------------------------------
 
-interface Props {
-  searchParams: Promise<Record<'page' | 'limit' | 'status' | 'search' | 'StartDate' | 'EndDate', string | undefined>>;
-}
+
 
 type DashboardStats = {
   subscribersCount: number;

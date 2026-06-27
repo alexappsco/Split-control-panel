@@ -68,7 +68,14 @@
       "offers": "العروض",
       "banners": "بانارات الاعلان",
       "coupons": "أكواد الخصم",
-      "notifications": "الاشعارات"
+      "notifications": "الاشعارات",
+      "legal-information": "المعلومات القانونية"
+
+    },
+    "LegalInformation":{
+      "title": "المعلومات القانونية",
+      "privacy-policy": "سياسة الخصوصية"
+
     },
     "Users": {
       "title": " المستخدمين",

@@ -1,71 +1,46 @@
-import { endpoints } from 'src/utils/endpoints';
-import { getData } from 'src/utils/crud-fetch-api';
-import { getTranslations } from 'next-intl/server';
-import { NoPermissionView } from 'src/sections/error';
-import { Report, ReportOrder } from 'src/types/report';
-import { FetchTags } from 'src/actions/config-actions';
-import { DEFAULT_LIMIT } from 'src/components/constant';
-import { PaymentMethodsApiResponse } from 'src/types/order';
-import ReportsView from 'src/sections/reports/views/list-view';
+import { endpoints } from "src/utils/endpoints";
+import { getData } from "src/utils/crud-fetch-api";
+import ReportsView from "src/sections/ReportsView/view";
+import { extractPagedResult, buildReportsEndpoint, parseReportsSearchParams } from "src/sections/ReportsView/reports-params";
 
-interface Props {
-  searchParams: Promise<
-    Record<'page' | 'limit' | 'PaymentMethodName' | 'RegistrationDate'|'OrderNumber'|'StartDate'|'EndDate', string | undefined>
-  >;
-}
+type ReportsPageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-export default async function Page({ searchParams }: Props) {
-  let { page, limit, PaymentMethodName, RegistrationDate,OrderNumber,StartDate,EndDate } = await searchParams;
+export default async function ReportsPage({ searchParams }: ReportsPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const pageParams = parseReportsSearchParams(resolvedSearchParams);
+  const activeTabParams = pageParams[pageParams.tab];
+  const activeTabEndpoint = buildReportsEndpoint(pageParams.tab, activeTabParams);
+  const spacesOptionsEndpoint = `${endpoints.reports.spaces}?SkipCount=0&MaxResultCount=100`;
 
-  const urlSearchParams = new URLSearchParams({
-    page: page || '1',
-    limit: limit || `${DEFAULT_LIMIT}`,
-    PaymentMethodName: PaymentMethodName || '',
-    RegistrationDate: RegistrationDate || '',
-    OrderNumber: OrderNumber || '',
-    StartDate: StartDate||'',
-    EndDate: EndDate||'',
+  const [summaryResponse, tabResponse, spacesOptionsResponse] = await Promise.all([
+    getData<unknown>(endpoints.reports.summary),
+    getData<unknown>(activeTabEndpoint),
+    pageParams.tab === 'users'
+      ? getData<unknown>(spacesOptionsEndpoint)
+      : Promise.resolve(null),
+  ]);
 
-  });
+  const summaryData = summaryResponse.success ? summaryResponse.data : null;
+  const tabPagedData = tabResponse.success
+    ? extractPagedResult(tabResponse.data)
+    : { items: [], totalCount: 0 };
 
-  const reports = await getData<Report>( `${endpoints.reports.listReports}?${urlSearchParams.toString()}`);
-  const orderReportsList = await getData<{ totalCount: number; items: ReportOrder[] }>(
-    `${endpoints.reports.ListOrderReports}?${urlSearchParams.toString()}`,
-    { tags: [FetchTags.ReportsOrdrersList] }
-  );
+  const spacesOptions =
+    spacesOptionsResponse && spacesOptionsResponse.success
+      ? extractPagedResult<{ id: string; spaceName?: string; name?: string }>(
+          spacesOptionsResponse.data
+        ).items
+      : [];
 
-  if ('error' in orderReportsList) {
-    if(orderReportsList.status === 403) {
-    return <NoPermissionView />;
-  }
-    throw new Error(orderReportsList.error);
-  }
-  const paymentMethodItems = await getData<PaymentMethodsApiResponse>(
-    `${endpoints.paynentMethod.list}?${urlSearchParams.toString()}`,
-    { tags: [FetchTags.PaymentMethod] }
-  );
-
-  if ('error' in paymentMethodItems) {
-   if(paymentMethodItems.status === 403) {
-    return <NoPermissionView />;
-  }
-    throw new Error(paymentMethodItems.error);
-  }
   return (
     <ReportsView
-      orderReports={orderReportsList?.data?.items}
-      totalCount={orderReportsList?.data?.totalCount}
-      reports={reports?.data as Report}
-      paymentMethod={paymentMethodItems?.data?.data?.items}
-
+      pageParams={pageParams}
+      summaryData={summaryData}
+      tableItems={tabPagedData.items}
+      totalCount={tabPagedData.totalCount}
+      spacesOptions={spacesOptions}
     />
   );
-}
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'Metadata.Reports' });
-
-  return {
-    title: t('title'),
-  };
 }

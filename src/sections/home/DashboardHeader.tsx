@@ -1,8 +1,8 @@
 "use client";
 
-import { Box, Typography, Paper } from "@mui/material";
-import { Grid } from "@mui/system";
 import Image from "next/image";
+import { Grid } from "@mui/system";
+import { Box, Paper, Typography } from "@mui/material";
 
 interface DashboardHeaderProps {
   stats: {

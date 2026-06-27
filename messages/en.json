@@ -70,7 +70,13 @@
       "offers": "Offers",
       "banners": "Banners",
       "coupons": "Discount codes",
-      "notifications": "Notifications"
+      "notifications": "Notifications",
+      "legal-information": "Legal Information"
+    },
+      "LegalInformation":{
+      "title": "Legal Information",
+      "privacy-policy": "Privacy Policy"
+
     },
     "Users": {
       "title": "Users",

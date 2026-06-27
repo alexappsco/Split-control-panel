@@ -174,13 +174,13 @@
 import {
   Card,
   Stack,
-  Typography,
   Table,
+  TableRow,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
-  TableRow,
+  Typography,
+  TableContainer,
 } from '@mui/material';
 
 export type Booking = {

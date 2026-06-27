@@ -82,30 +82,30 @@ init: async () => {
     }
   },
 
- 
+
  logout: async () => {
     const { user } = get();
     // Clean up temporary image URLs using image property
     if (user?.image?.startsWith('blob:')) {
       URL.revokeObjectURL(user.image);
     }
-    
+
     await removeSession();
     set({ authenticated: false, user: null, loading: false });
   },
   updateProfile: (updates) => {
     set((state) => {
       if (!state.user) return state;
-      
+
       // Handle image cleanup
       const currentImage = state.user.image;
       const newImage = updates.image;
-      
+
       // Revoke old temporary URL if being replaced
       if (currentImage?.startsWith('blob:') && currentImage !== newImage) {
         URL.revokeObjectURL(currentImage);
       }
-      
+
       return {
         user: {
           ...state.user,
@@ -115,7 +115,7 @@ init: async () => {
       };
     });
   },
-  //  updateProfile: (updates) => 
+  //  updateProfile: (updates) =>
   //   set((state) => ({
   //     user: state.user ? { ...state.user, ...updates } : null
   //   })),

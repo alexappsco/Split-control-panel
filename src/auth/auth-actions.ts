@@ -85,19 +85,57 @@ export async function requestOtp(email: string): Promise<void> {
   }
 }
 
-export async function verifyOtp(email: string, otp: string): Promise<{ accessToken: string }> {
+// export async function verifyOtp(email: string, otp: string): Promise<{ accessToken: string }> {
+//   try {
+//     const response = await axiosInstance.post(endpoints.auth.verifyOtp, {
+//       email,
+//       isPhone: false,
+//       otp,
+//     });
+//     return response as unknown as { accessToken: string };
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// }
+export async function verifyOtp(email: string, code: string): Promise<{ token: string }> {
   try {
     const response = await axiosInstance.post(endpoints.auth.verifyOtp, {
       email,
-      isPhone: false,
-      otp,
+      code, // ✅ Use "code" as the field name (not "otp")
     });
-    return response as unknown as { accessToken: string };
-  } catch (error) {
-    throw new Error(error.message);
+
+    // The API returns { token: "..." }
+    return { token: (response as any).token };
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message || 'OTP verification failed');
   }
 }
 
+// export async function resetPassword({
+//   email,
+//   newPassword,
+//   confirmPassword,
+//   token,
+// }: {
+//   email:string
+//   newPassword: string;
+//   confirmPassword: string;
+//   token: string;
+// }): Promise<void> {
+//   try {
+//     await axiosInstance.post(
+//       endpoints.auth.changePassword,
+//       { newPassword, confirmPassword },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 export async function resetPassword({
   email,
   newPassword,
@@ -112,14 +150,14 @@ export async function resetPassword({
   try {
     await axiosInstance.post(
       endpoints.auth.changePassword,
-      { email, newPassword, confirmPassword, token },
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        email,
+        token,
+        newPassword,
+        confirmPassword,
       }
     );
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message || 'Password reset failed');
   }
 }

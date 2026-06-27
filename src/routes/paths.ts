@@ -78,14 +78,14 @@ export const paths = {
         single: (id: string) => `/users/clients/${id}`,
       },
       employee: {
-        list: '/users/employee',
+        list: '/users',
         edit: (id: string) => `/users/employee/edit/${id}`,
         register: '/users/employee/register',
         single: (id: string) => `/users/employees/${id}`,
       },
     },
     policy: {
-      root: '/policy',
+      root: '/privacy',
       PrivacyPolicy: {
         list: '/policy/privacy-policy', // Matches your privacy policy path
       },
