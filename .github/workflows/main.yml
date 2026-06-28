@@ -31,17 +31,25 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USERNAME }}
         run: |
+          missing=()
+          [ -z "$SSH_PRIVATE_KEY" ] && missing+=("SSH_PRIVATE_KEY")
+          [ -z "$SSH_HOST" ] && missing+=("SSH_HOST")
+          [ -z "$SSH_USER" ] && missing+=("SSH_USERNAME")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "Missing required GitHub repository secrets: ${missing[*]}"
+            echo "Add them at: Settings → Secrets and variables → Actions → New repository secret"
+            exit 1
+          fi
+
           # Configure SSH key for server access
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -t ed25519 -H $SSH_HOST >> ~/.ssh/known_hosts
+          ssh-keyscan -t ed25519 -H "$SSH_HOST" >> ~/.ssh/known_hosts
           # SSH into server and run commands
-          ssh $SSH_USER@$SSH_HOST << 'EOF'
+          ssh "$SSH_USER@$SSH_HOST" << 'EOF'
             set -e
             source ~/.bashrc
-            eval "$(ssh-agent -s)"
-            ssh-add ~/.ssh/id_ed25519
             cd /var/www/admin
             git pull
             # Install nvm if not already installed
