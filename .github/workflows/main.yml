@@ -50,7 +50,7 @@ jobs:
           ssh "$SSH_USER@$SSH_HOST" << 'EOF'
             set -e
             source ~/.bashrc
-            cd /var/www/admin
+            cd /var/www/Split-control-panel
             git pull
             # Install nvm if not already installed
             if ! command -v nvm &> /dev/null; then
@@ -62,5 +62,5 @@ jobs:
             nvm use 20
             npm install -f
             npm run build
-            pm2 restart admin
+            pm2 restart Split-control-panel
           EOF
