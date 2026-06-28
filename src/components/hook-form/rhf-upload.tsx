@@ -1,9 +1,10 @@
+
 import { FormLabel } from '@mui/material';
-import { useTranslations } from 'next-intl';
-import { fData } from 'src/utils/format-number';
 import FormHelperText from '@mui/material/FormHelperText';
+import { useTranslations } from 'next-intl';
 import { Controller, useFormContext } from 'react-hook-form';
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_HELPER } from 'src/config-global';
+import { fData } from 'src/utils/format-number';
 
 import { Upload, UploadBox, UploadProps, UploadAvatar } from '../upload';
 
@@ -58,7 +59,6 @@ export function RHFUploadAvatar({
             helperText={
               !!maxSize && maxSizeHelper ? (
                 <FormHelperText
-                  // variant="caption"
                   sx={{
                     px: 2,
                     mt: 1,

@@ -8,8 +8,8 @@ export const paths = {
   // Control Panel
   controlPanel: {
     main: '/',
-    profile:{
-      viewProfileEdit:'/edit-profile'
+    profile: {
+      viewProfileEdit: '/edit-profile'
     },
     categories: {
       list: '/categories',
@@ -69,13 +69,13 @@ export const paths = {
       drivers: {
         list: '/users/drivers',
         driverOrders: (id: string) => `/users/drivers/orders/${id}`,
-        edit: (id: string) =>`/users/drivers/edit/${id}`,
+        edit: (id: string) => `/users/drivers/edit/${id}`,
         single: (id: string) => `/users/drivers/${id}`,
       },
       clients: {
-        list: '/users/clients',
-        edit: (id: string) => `/users/clients/edit/${id}`,
-        single: (id: string) => `/users/clients/${id}`,
+        list: '/users',
+        edit: (id: string) => `/users/edit/${id}`,
+        single: (id: string) => `/users/${id}`,
       },
       employee: {
         list: '/users',
@@ -96,11 +96,11 @@ export const paths = {
     contactUs: {
       list: '/contact-us',
     },
-    reports:{
+    reports: {
       list: '/reports',
     },
-    deliveryFees:{
-      list:'/delivery-fees'
+    deliveryFees: {
+      list: '/delivery-fees'
     }
   },
 };

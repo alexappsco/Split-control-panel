@@ -4,7 +4,7 @@ import { usePathname } from 'src/routes/hooks';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useActiveLink } from 'src/routes/hooks/use-active-link';
 
-import NavItem from './nav-item';
+// import NavItem from './nav-item';
 import { NavListProps, NavSubListProps } from '../types';
 
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@ export default function NavList({ data, depth, slotProps }: NavListProps) {
 
   return (
     <>
-      <NavItem
+      {/* <NavItem
         ref={navRef}
         open={openMenu}
         onMouseEnter={handleOpenMenu}
@@ -59,7 +59,7 @@ export default function NavList({ data, depth, slotProps }: NavListProps) {
         active={active}
         className={active ? 'active' : ''}
         sx={depth === 1 ? slotProps?.rootItem : slotProps?.subItem}
-      />
+      /> */}
 
       {!!data.children && (
         <Popover

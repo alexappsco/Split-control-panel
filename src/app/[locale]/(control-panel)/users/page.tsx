@@ -1,6 +1,7 @@
-import { endpoints } from "src/utils/endpoints";
-import { getData } from "src/utils/crud-fetch-api";
-import UsersView from "src/sections/UsersView/view";
+
+import { endpoints } from 'src/utils/endpoints';
+import { getData } from 'src/utils/crud-fetch-api';
+import UsersView from 'src/sections/UsersView/view';
 
 export default async function UsersPage() {
   const response = await getData<{

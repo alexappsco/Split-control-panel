@@ -21,7 +21,7 @@ export default function DashboardHeader({
     {
       label: "الأعضاء",
       value: stats.subscribersCount,
-      icon: "/icons/members.svg",
+      icon: "/assets/icons/home/members.svg",
       bg: "#EBF9F9",
       border: "#A4E5E3",
       color: "#004B50",
@@ -29,7 +29,7 @@ export default function DashboardHeader({
     {
       label: "عدد العمليات المنفذة",
       value: stats.executedOperationsCount,
-      icon: "/icons/expenses.svg",
+      icon: "/assets/icons/home/expenses.svg",
       bg: "#EBF9F9",
       border: "#A4E5E3",
       color: "#006C9C",
@@ -37,7 +37,7 @@ export default function DashboardHeader({
     {
       label: "عدد المصروفات المسجلة",
       value: stats.recordedExpensesCount,
-      icon: "/icons/expenses.svg",
+      icon: "/assets/icons/home/expenses.svg",
       bg: "#EBF9F9",
       border: "#A4E5E3",
       color: "#006C9C",
@@ -45,7 +45,7 @@ export default function DashboardHeader({
     {
       label: "قيمة المصروفات المسجلة",
       value: stats.recordedExpensesValue,
-      icon: "/icons/expenses.svg",
+      icon: "/assets/icons/home/expenses.svg",
       bg: "#EBF9F9",
       border: "#A4E5E3",
       color: "#006C9C",
@@ -53,7 +53,7 @@ export default function DashboardHeader({
     {
       label: "إجمالي المساحات",
       value: stats.totalSpacesCount,
-      icon: "/icons/spaces.svg",
+      icon: "/assets/icons/home/spaces.svg",
       bg: "#EBF9F9",
       border: "#A4E5E3",
       color: "#00B8D9",

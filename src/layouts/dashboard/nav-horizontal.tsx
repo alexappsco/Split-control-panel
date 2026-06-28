@@ -46,9 +46,9 @@ function NavHorizontal() {
             slotProps={{
               currentRole: user?.role,
             }}
-            sx={{
-              ...theme.mixins.toolbar,
-            }}
+            // sx={{
+            //   ...theme.mixins.toolbar,
+            // }}
           />
         </Scrollbar>
       </Toolbar>

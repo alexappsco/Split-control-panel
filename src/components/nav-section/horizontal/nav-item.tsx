@@ -37,8 +37,8 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
     const renderContent = (
       <StyledNavItem
         ref={ref}
-        open={open}
-        depth={depth}
+        // open={open}
+        // depth={depth}
         active={active}
         disabled={disabled}
         {...other}
@@ -124,7 +124,7 @@ export default NavItem;
 
 const StyledNavItem = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== 'active',
-})<NavItemStateProps>(({ active, open, depth, theme }) => {
+})<NavItemStateProps>(({ active, depth, theme }) => {
   const subItem = depth !== 1;
 
   const opened = open && !active;
