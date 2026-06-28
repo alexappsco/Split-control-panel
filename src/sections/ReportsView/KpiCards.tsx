@@ -128,7 +128,7 @@ export default function KpiCards({ summaryData }: KpiCardsProps) {
                 />
               </Box>
 
-              <Box sx={{ textAlign: "right", minWidth: 0, flex: 1 }}>
+              <Box sx={{  minWidth: 0, flex: 1, textAlign: "left" }}>
                 <Typography
                   sx={{
                     fontSize: card.subValue ? { xs: 20, md: 22 } : { xs: 26, md: 30 },
