@@ -14,56 +14,56 @@ const CHART_SRC: Record<KpiChartType, string> = {
 type KpiCardsProps = {
   summaryData?: any;
 };
-  function mapSummaryToKpiCards(summaryData: any): KpiCardData[] {
-    return [{
-      id: "total-expenses",
-      label: "إجمالي المصروفات",
-      value: `${(summaryData as any).totalExpenses?.value ?? 0} ريال`,
-      chartType: "line",
-      footer: { direction: ((summaryData as any).totalExpenses?.trendPercentage?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).totalExpenses?.trendPercentage?? 0}% than last week` },
+function mapSummaryToKpiCards(summaryData: any): KpiCardData[] {
+  return [{
+    id: "total-expenses",
+    label: "إجمالي المصروفات",
+    value: `${(summaryData as any).totalExpenses?.value ?? 0} ريال`,
+    chartType: "line",
+    footer: { direction: ((summaryData as any).totalExpenses?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).totalExpenses?.trendPercentage ?? 0}% than last week` },
+  },
+  {
+    id: "active-users",
+    label: "عدد المستخدمين النشطين",
+    value: `${(summaryData as any).activeUsers.value ?? 0}`,
+    chartType: "chart",
+    footer: { direction: ((summaryData as any).activeUsers?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).activeUsers?.trendPercentage ?? 0}% ` },
+  },
+  {
+    id: "operations-count",
+    label: "عدد العمليات",
+    value: `${(summaryData as any).totalOperations.value ?? 0}`,
+    chartType: "line",
+    footer: {
+      direction: ((summaryData as any).totalOperations?.trendPercentage ?? 0) > 0 ? "up" : "down",
+      text: `إجمالي عدد المصروفات المسجلة ${((summaryData as any).totalOperations?.trendPercentage ?? 0)}%`,
     },
-    {
-      id: "active-users",
-      label: "عدد المستخدمين النشطين",
-      value: `${(summaryData as any).activeUsers.value ?? 0}`,
-      chartType: "chart",
-      footer: { direction: ((summaryData as any).activeUsers?.trendPercentage?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).activeUsers?.trendPercentage?? 0}% ` },
+  },
+  {
+    id: "active-spaces",
+    label: "عدد المساحات النشطة",
+    value: `${(summaryData as any).activeSpaces.value ?? 0}`,
+    chartType: "chart",
+    footer: { direction: ((summaryData as any).activeSpaces?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).activeSpaces?.trendPercentage ?? 0}% ` },
+  },
+  {
+    id: "avg-spend-per-space",
+    label: "متوسط الصرف لكل مساحة",
+    value: `${(summaryData as any).averageExpensePerSpace.value ?? 0} ريال`,
+    chartType: "chart",
+    footer: {
+      direction: ((summaryData as any).averageExpensePerSpace?.trendPercentage ?? 0) > 0 ? "up" : "down",
+      text: `${(summaryData as any).averageExpensePerSpace?.trendPercentage ?? 0}% إجمالي قيم ${((summaryData as any).averageExpensePerSpace?.value ?? 0)} ريال`,
     },
-    {
-      id: "operations-count",
-      label: "عدد العمليات",
-      value: `${(summaryData as any).totalOperations.value ?? 0}`,
-      chartType: "line",
-      footer: {
-        direction: ((summaryData as any).totalOperations?.trendPercentage?? 0) > 0 ? "up" : "down",
-        text: `إجمالي عدد المصروفات المسجلة ${((summaryData as any).totalOperations?.trendPercentage?? 0)}%`,
-      },
-    },
-    {
-      id: "active-spaces",
-      label: "عدد المساحات النشطة",
-      value: `${(summaryData as any).activeSpaces.value ?? 0}`,
-      chartType: "chart",
-      footer: { direction: ((summaryData as any).activeSpaces?.trendPercentage?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).activeSpaces?.trendPercentage?? 0}% ` },
-    },
-    {
-      id: "avg-spend-per-space",
-      label: "متوسط الصرف لكل مساحة",
-      value: `${(summaryData as any).averageExpensePerSpace.value ?? 0} ريال`,
-      chartType: "chart",
-      footer: {
-        direction: ((summaryData as any).averageExpensePerSpace?.trendPercentage?? 0) > 0 ? "up" : "down",
-        text: `${(summaryData as any).averageExpensePerSpace?.trendPercentage?? 0}% إجمالي قيم ${((summaryData as any).averageExpensePerSpace?.value?? 0)} ريال`,
-      },
-    },
-    {
-      id: "top-spending-space",
-      label: "أكبر مساحة صرفاً",
-      value: "سكن مشترك",
-      subValue: `${(summaryData as any).highestExpenseSpace.totalAmount ?? 0} ريال`,
-      chartType: "line",
-      footer: { direction: ((summaryData as any).highestExpenseSpace?.trendPercentage?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).highestExpenseSpace?.trendPercentage?? 0}% ` },
-    },
+  },
+  {
+    id: "top-spending-space",
+    label: "أكبر مساحة صرفاً",
+    value: "سكن مشترك",
+    subValue: `${(summaryData as any).highestExpenseSpace.totalAmount ?? 0} ريال`,
+    chartType: "line",
+    footer: { direction: ((summaryData as any).highestExpenseSpace?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).highestExpenseSpace?.trendPercentage ?? 0}% ` },
+  },
   ];
 }
 
@@ -80,7 +80,7 @@ export type KpiCardData = {
   };
 };
 export default function KpiCards({ summaryData }: KpiCardsProps) {
-  
+
   const cards = summaryData ? mapSummaryToKpiCards(summaryData) : [];
   return (
     <Box
@@ -101,14 +101,13 @@ export default function KpiCards({ summaryData }: KpiCardsProps) {
         return (
           <DashboardCard key={card.id} sx={getKpiCardSx(`${index * 0.07}s`)}>
             <Typography sx={[kpiLabelSx, { mb: 1.5 }]}>{card.label}</Typography>
-
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 gap: 2,
-                direction: "ltr",
+                direction: "rtl",
                 mb: 1.5,
               }}
             >
@@ -183,6 +182,7 @@ export default function KpiCards({ summaryData }: KpiCardsProps) {
                 {card.footer.text}
               </Typography>
             </Box>
+
           </DashboardCard>
         );
       })}

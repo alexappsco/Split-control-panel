@@ -20,8 +20,28 @@ const Logo = ({ disabledLink = false, enableText = false, sx, textProps }: LogoP
 
   const logo = (
     <Box component="div" sx={{ display: 'flex', width: 'auto', height: 'auto', cursor: 'pointer' }}>
-        <Image
-        src={'/logo/logo_single.png'}
+      <SvgColor
+        src="/logo/logo_text.svg"
+        sx={{
+          width: 40,
+          height: 40,
+          cursor: 'pointer',
+          color: 'primary.main',
+          ...sx,
+        }}
+      />
+      <SvgColor
+        src="/logo/logo_single.svg"
+        sx={{
+          width: 40,
+          height: 40,
+          cursor: 'pointer',
+          color: 'primary.main',
+          ...sx,
+        }}
+      />
+      {/* <Image
+        src={'/logo/logo_single.svg'}
         alt={'Logo'}
         width={90}
         height={90}
@@ -29,8 +49,8 @@ const Logo = ({ disabledLink = false, enableText = false, sx, textProps }: LogoP
           cursor: 'pointer',
           color: 'primary.main',
         }}
-      />
-      {enableText && (
+      /> */}
+      {/* {enableText && (
         <Typography
           variant="h6"
           component="span"
@@ -42,17 +62,7 @@ const Logo = ({ disabledLink = false, enableText = false, sx, textProps }: LogoP
           {t('Metadata.title')}
 
         </Typography>
-      )}
-      {/* <SvgColor
-        src="/logo/logo_text.svg"
-        sx={{
-          width: 40,
-          height: 40,
-          cursor: 'pointer',
-          color: 'primary.main',
-          ...sx,
-        }}
-      /> */}
+      )} */}
     </Box>
   );
 

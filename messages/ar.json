@@ -70,15 +70,13 @@
       "coupons": "أكواد الخصم",
       "notifications": "الاشعارات",
       "legal-information": "المعلومات القانونية"
-
     },
-    "LegalInformation":{
+    "LegalInformation": {
       "title": "المعلومات القانونية",
       "privacy-policy": "سياسة الخصوصية"
-
     },
     "Users": {
-      "title": " المستخدمين",
+      "title": "إدارة المستخدمين",
       "drivers": "السائقين",
       "clients": "العملاء",
       "employees": "الموظفين"
@@ -90,7 +88,7 @@
     "contact-us": "تواصل معنا",
     "Work-area": " مناطق العمل",
     "delivery-fees": "رسوم التوصيل",
-    "setting":"الاعدادات"
+    "setting": "الاعدادات"
   },
   "Global": {
     "title": "ثمار صنوان",
@@ -319,9 +317,7 @@
       "sales_by_day": "المبيعات حسب اليوم",
       "edit_free_shipping_vat": "تعديل الشحن المجاني وضريبة القيمة المضافة والحد الأدنى للطلب",
       "minimum_order_amount": "الحد الأدنى للطلب"
-
     },
-
     "Categories": {
       "categories_title": "الأقسام الرئيسية",
       "subcategories_title": "الأقسام الفرعية",
@@ -413,7 +409,7 @@
       "add_not": "اضافة ملاحظة",
       "purchasesvalue": "قيمة المشتريات",
       "delivery_fee_with_shipping_cost": "رسوم التوصيل(شامل ضريبة القيمة المضافة)",
-      "order_success":"تم تحديث حالة الطلب بنجاح",
+      "order_success": "تم تحديث حالة الطلب بنجاح",
       "OrderStatus": {
         "all": "الكل",
         "new_order": "الطلبات الجديدة",
@@ -468,8 +464,7 @@
       "percentage_validation": "خصم بنسبة مئوية (من 1 إلى 100%)",
       "fixed_amount_validation": "خصم بمبلغ ثابت (أي رقم موجب)",
       "percentage_limit_validation": "لا يمكن أن تتجاوز نسبة الخصم 100%",
-      "discount_must_be_greater_than_0":"يجب أن يكون الخصم أكبر من 0"
-
+      "discount_must_be_greater_than_0": "يجب أن يكون الخصم أكبر من 0"
     },
     "Notification": {
       "all": "الكل",
