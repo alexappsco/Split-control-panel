@@ -23,6 +23,10 @@ build
 .env.test.local
 .env.production.local
 
+# deploy keys (local only — use GitHub Actions secrets in CI)
+deploy_key
+deploy_key.pub
+
 # misc
 .DS_Store
 .vercel
