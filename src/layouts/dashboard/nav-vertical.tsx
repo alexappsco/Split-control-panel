@@ -48,7 +48,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     >
       <Box sx={{ width: 'fit-content', mx: 'auto', my: 4.5 }}>
         <Logo
-          enableText
+            enableText
           sx={{ width: 100, height: 64, color: 'primary.contrastText' }}
           textProps={{ sx: { color: 'primary.contrastText' }, variant: 'h4', fontWeight: 500 }}
         />

@@ -1,33 +1,30 @@
 "use client";
 
-import type { HeadCell } from "src/components/SimpleTable/types";
-
 import { useMemo } from "react";
-import { formatDate } from "date-fns";
-import Iconify from "src/components/iconify";
-import SimpleTable from "src/components/SimpleTable";
 import {
   Box,
-  Select,
-  MenuItem,
-  TextField,
   InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
   type SelectChangeEvent,
 } from "@mui/material";
-
-import type { GeneralExpense } from "../constants";
+import Iconify from "src/components/iconify";
+import SimpleTable from "src/components/SimpleTable";
+import type { HeadCell } from "src/components/SimpleTable/types";
 import type { ExpensesTabParams } from "../reports-params";
-
 import {
   asRecord,
-  StatusChip,
-  useTabQuery,
+  createCheckboxColumn,
   filterFieldSx,
   searchFieldSx,
-  useRowSelection,
+  StatusChip,
   useDebouncedSearch,
-  createCheckboxColumn,
+  useRowSelection,
+  useTabQuery,
 } from "./report-table-shared";
+import type { GeneralExpense } from "../constants";
+import { formatDate } from "date-fns";
 
 type ExpensesReportTableProps = {
   params: ExpensesTabParams;

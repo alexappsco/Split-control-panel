@@ -1,12 +1,10 @@
 "use client";
 
 import { Suspense } from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
-
-import type { ReportsPageParams } from "./reports-params";
-
+import { Box, CircularProgress, Typography } from "@mui/material";
 import KpiCards from "./KpiCards";
 import TransactionsTable from "./TransactionsTable";
+import type { ReportsPageParams } from "./reports-params";
 
 type SpaceOption = {
   id: string;
@@ -54,7 +52,7 @@ export default function ReportsView({
           flexShrink: 0,
         }}
       >
-        التقارير sss
+        التقارير
       </Typography>
 
       <KpiCards summaryData={summaryData} />

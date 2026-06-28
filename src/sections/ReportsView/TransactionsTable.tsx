@@ -1,22 +1,20 @@
 "use client";
 
 import { Tab, Tabs } from "@mui/material";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import DashboardCard from "./DashboardCard";
+import { REPORT_TABS, type ReportTabValue } from "./constants";
 import type {
-  UsersTabParams,
-  SpacesTabParams,
+  CategoriesTabParams,
   ExpensesTabParams,
   ReportsPageParams,
-  CategoriesTabParams,
+  SpacesTabParams,
+  UsersTabParams,
 } from "./reports-params";
-
-import DashboardCard from "./DashboardCard";
-import UsersReportTable from "./tables/UsersReportTable";
-import SpacesReportTable from "./tables/SpacesReportTable";
-import { REPORT_TABS, type ReportTabValue } from "./constants";
-import ExpensesReportTable from "./tables/ExpensesReportTable";
 import CategoriesReportTable from "./tables/CategoriesReportTable";
+import ExpensesReportTable from "./tables/ExpensesReportTable";
+import SpacesReportTable from "./tables/SpacesReportTable";
+import UsersReportTable from "./tables/UsersReportTable";
 
 type SpaceOption = {
   id: string;

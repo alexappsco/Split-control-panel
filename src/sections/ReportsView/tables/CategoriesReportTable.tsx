@@ -1,22 +1,19 @@
 "use client";
 
-import type { HeadCell } from "src/components/SimpleTable/types";
-
 import { useMemo } from "react";
+import { Box, InputAdornment, TextField } from "@mui/material";
 import Iconify from "src/components/iconify";
 import SimpleTable from "src/components/SimpleTable";
-import { Box, TextField, InputAdornment } from "@mui/material";
-
+import type { HeadCell } from "src/components/SimpleTable/types";
 import type { ReportCategory } from "../constants";
 import type { CategoriesTabParams } from "../reports-params";
-
 import {
   asRecord,
-  useTabQuery,
-  searchFieldSx,
-  useRowSelection,
-  useDebouncedSearch,
   createCheckboxColumn,
+  searchFieldSx,
+  useDebouncedSearch,
+  useRowSelection,
+  useTabQuery,
 } from "./report-table-shared";
 
 type CategoriesReportTableProps = {

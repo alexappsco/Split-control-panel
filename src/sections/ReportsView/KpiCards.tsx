@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { Box, Typography } from "@mui/material";
-import { kpiLabelSx, getKpiCardSx } from "src/components/kpi-card-styles";
-
+import Image from "next/image";
+import { getKpiCardSx, kpiLabelSx } from "src/components/kpi-card-styles";
 import DashboardCard from "./DashboardCard";
 import { CHART_ASSETS, type KpiChartType } from "./constants";
 

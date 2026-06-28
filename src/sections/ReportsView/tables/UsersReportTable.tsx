@@ -1,26 +1,27 @@
 "use client";
 
-import type { HeadCell } from "src/components/SimpleTable/types";
-
 import { useMemo } from "react";
-import Iconify from "src/components/iconify";
-import SimpleTable from "src/components/SimpleTable";
 import {
   Box,
-  TextField,
   InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
+  type SelectChangeEvent,
 } from "@mui/material";
-
+import Iconify from "src/components/iconify";
+import SimpleTable from "src/components/SimpleTable";
+import type { HeadCell } from "src/components/SimpleTable/types";
 import type { ReportUser } from "../constants";
 import type { UsersTabParams } from "../reports-params";
-
 import {
   asRecord,
-  useTabQuery,
-  searchFieldSx,
-  useRowSelection,
-  useDebouncedSearch,
   createCheckboxColumn,
+  filterFieldSx,
+  searchFieldSx,
+  useDebouncedSearch,
+  useRowSelection,
+  useTabQuery,
 } from "./report-table-shared";
 
 type SpaceOption = {
@@ -52,6 +53,7 @@ export default function UsersReportTable({
   params,
   items,
   totalCount,
+  spacesOptions,
 }: UsersReportTableProps) {
   const { updateParams, pagination } = useTabQuery("users", params);
   const { searchInput, setSearchInput } = useDebouncedSearch(
@@ -59,12 +61,18 @@ export default function UsersReportTable({
     params,
     updateParams
   );
-  const { selectedIds, toggleSelect, toggleSelectAll } =
+  const { selectedIds, toggleSelect, toggleSelectAll, clearSelection } =
     useRowSelection();
 
   const rows = useMemo(() => items.map(normalizeUser), [items]);
 
-
+  const spaceFilterOptions = [
+    { value: "", label: "المساحات" },
+    ...spacesOptions.map((space) => ({
+      value: space.id,
+      label: space.spaceName ?? space.name ?? space.id,
+    })),
+  ];
 
   const headCells: HeadCell<ReportUser>[] = [
     createCheckboxColumn(

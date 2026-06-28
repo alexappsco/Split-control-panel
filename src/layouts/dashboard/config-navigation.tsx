@@ -15,17 +15,7 @@ export function useNavData() {
             path: paths.controlPanel.main,
             icon: ICONS.navbar.main,
           },
-         {
-           title: 'LegalInformation.title',
-           path: paths.controlPanel.marketings.root,
-           icon: ICONS.navbar.marketings,
-           children: [
-             {
-               title: 'LegalInformation.privacy-policy',
-               path: paths.controlPanel.policy.root,
-             }
-           ],
-         },
+
            {
             title: 'reports',
             path: paths.controlPanel.reports.list,
@@ -33,19 +23,24 @@ export function useNavData() {
           },
           {
             title: 'Users.title',
-            path: paths.controlPanel.users.root,
+            path: paths.controlPanel.users.clients.list,
             icon: ICONS.navbar.users,
-            children: [
-              {
-                title: 'Users.clients',
-                path: paths.controlPanel.users.clients.list,
-              },
-            ],
           },
           {
             title: 'contact-us',
             path: paths.controlPanel.contactUs.list,
             icon: ICONS.navbar.contactUs,
+          },
+          {
+            title: 'LegalInformation.title',
+            path: paths.controlPanel.marketings.root,
+            icon: ICONS.navbar.marketings,
+            children: [
+              {
+                title: 'LegalInformation.privacy-policy',
+                path: paths.controlPanel.policy.root,
+              }
+            ],
           },
         ],
       },

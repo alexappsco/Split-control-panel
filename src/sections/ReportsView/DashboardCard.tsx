@@ -1,7 +1,6 @@
 "use client";
 
 import { Box, BoxProps } from "@mui/material";
-
 import { CARD_SX } from "./constants";
 
 type DashboardCardProps = BoxProps & {

@@ -1,5 +1,4 @@
 import { endpoints } from 'src/utils/endpoints';
-
 import type { ReportTabValue } from './constants';
 
 export const DEFAULT_MAX_RESULT_COUNT = 10;

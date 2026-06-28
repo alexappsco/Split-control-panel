@@ -121,10 +121,10 @@ export default NavItem;
 
 const StyledNavItem = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== 'active',
-})<NavItemStateProps>(({ active, open, depth, theme }) => {
+})<any>(({ active, open, depth, theme }) => {
   const subItem = depth !== 1;
 
-  const opened = open && !active;
+  const opened = Boolean(open) && !active;
 
   const lightMode = theme.palette.mode === 'light';
 
