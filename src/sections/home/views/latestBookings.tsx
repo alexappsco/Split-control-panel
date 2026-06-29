@@ -171,6 +171,7 @@
 // }
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Card,
   Stack,
@@ -197,6 +198,8 @@ type Props = {
 };
 
 export default function LatestBookings({ bookings }: Props) {
+  const t = useTranslations();
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
 
@@ -232,7 +235,7 @@ export default function LatestBookings({ bookings }: Props) {
             fontWeight: 700,
           }}
         >
-          أحدث المساهمات
+          {t('Pages.Home.latest_contributions')}
         </Typography>
       </Stack>
 
@@ -262,35 +265,35 @@ export default function LatestBookings({ bookings }: Props) {
                 align="right"
                 sx={{ backgroundColor: '#F3F4F6' }}
               >
-                عنوان المساهمة
+                {t('Pages.Home.contribution_title')}
               </TableCell>
 
               <TableCell
                 align="right"
                 sx={{ backgroundColor: '#F3F4F6' }}
               >
-                المساحة
+                {t('Pages.Home.space')}
               </TableCell>
 
               <TableCell
                 align="right"
                 sx={{ backgroundColor: '#F3F4F6' }}
               >
-                المبلغ
+                {t('Pages.Home.amount')}
               </TableCell>
 
               <TableCell
                 align="right"
                 sx={{ backgroundColor: '#F3F4F6' }}
               >
-                الحالة
+                {t('Global.Label.status')}
               </TableCell>
 
               <TableCell
                 align="right"
                 sx={{ backgroundColor: '#F3F4F6' }}
               >
-                التاريخ
+                {t('Pages.Home.date')}
               </TableCell>
 
               <TableCell sx={{ backgroundColor: '#F3F4F6' }} />

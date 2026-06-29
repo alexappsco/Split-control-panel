@@ -2,6 +2,7 @@
 
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { getKpiCardSx, kpiLabelSx } from "src/components/kpi-card-styles";
 import DashboardCard from "./DashboardCard";
 import { CHART_ASSETS, type KpiChartType } from "./constants";
@@ -11,62 +12,6 @@ const CHART_SRC: Record<KpiChartType, string> = {
   bar: CHART_ASSETS.bar,
   chart: CHART_ASSETS.lineBlue,
 };
-type KpiCardsProps = {
-  summaryData?: any;
-};
-function mapSummaryToKpiCards(summaryData: any): KpiCardData[] {
-  return [{
-    id: "total-expenses",
-    label: "إجمالي المصروفات",
-    value: `${(summaryData as any).totalExpenses?.value ?? 0} ريال`,
-    chartType: "line",
-    footer: { direction: ((summaryData as any).totalExpenses?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).totalExpenses?.trendPercentage ?? 0}% than last week` },
-  },
-  {
-    id: "active-users",
-    label: "عدد المستخدمين النشطين",
-    value: `${(summaryData as any).activeUsers.value ?? 0}`,
-    chartType: "chart",
-    footer: { direction: ((summaryData as any).activeUsers?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).activeUsers?.trendPercentage ?? 0}% ` },
-  },
-  {
-    id: "operations-count",
-    label: "عدد العمليات",
-    value: `${(summaryData as any).totalOperations.value ?? 0}`,
-    chartType: "line",
-    footer: {
-      direction: ((summaryData as any).totalOperations?.trendPercentage ?? 0) > 0 ? "up" : "down",
-      text: `إجمالي عدد المصروفات المسجلة ${((summaryData as any).totalOperations?.trendPercentage ?? 0)}%`,
-    },
-  },
-  {
-    id: "active-spaces",
-    label: "عدد المساحات النشطة",
-    value: `${(summaryData as any).activeSpaces.value ?? 0}`,
-    chartType: "chart",
-    footer: { direction: ((summaryData as any).activeSpaces?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).activeSpaces?.trendPercentage ?? 0}% ` },
-  },
-  {
-    id: "avg-spend-per-space",
-    label: "متوسط الصرف لكل مساحة",
-    value: `${(summaryData as any).averageExpensePerSpace.value ?? 0} ريال`,
-    chartType: "chart",
-    footer: {
-      direction: ((summaryData as any).averageExpensePerSpace?.trendPercentage ?? 0) > 0 ? "up" : "down",
-      text: `${(summaryData as any).averageExpensePerSpace?.trendPercentage ?? 0}% إجمالي قيم ${((summaryData as any).averageExpensePerSpace?.value ?? 0)} ريال`,
-    },
-  },
-  {
-    id: "top-spending-space",
-    label: "أكبر مساحة صرفاً",
-    value: "سكن مشترك",
-    subValue: `${(summaryData as any).highestExpenseSpace.totalAmount ?? 0} ريال`,
-    chartType: "line",
-    footer: { direction: ((summaryData as any).highestExpenseSpace?.trendPercentage ?? 0) > 0 ? "up" : "down", text: `${(summaryData as any).highestExpenseSpace?.trendPercentage ?? 0}% ` },
-  },
-  ];
-}
-
 
 export type KpiCardData = {
   id: string;
@@ -79,9 +24,111 @@ export type KpiCardData = {
     text: string;
   };
 };
-export default function KpiCards({ summaryData }: KpiCardsProps) {
 
-  const cards = summaryData ? mapSummaryToKpiCards(summaryData) : [];
+type KpiCardsProps = {
+  summaryData?: any;
+};
+
+function mapSummaryToKpiCards(
+  summaryData: any,
+  t: ReturnType<typeof useTranslations>
+): KpiCardData[] {
+  const currency = t("Pages.Reports.currency");
+
+  return [
+    {
+      id: "total-expenses",
+      label: t("Pages.Reports.kpi_total_expenses"),
+      value: `${summaryData?.totalExpenses?.value ?? 0} ${currency}`,
+      chartType: "line",
+      footer: {
+        direction:
+          (summaryData?.totalExpenses?.trendPercentage ?? 0) > 0 ? "up" : "down",
+        text: t("Pages.Reports.trend_than_last_week", {
+          percent: summaryData?.totalExpenses?.trendPercentage ?? 0,
+        }),
+      },
+    },
+    {
+      id: "active-users",
+      label: t("Pages.Reports.kpi_active_users"),
+      value: `${summaryData?.activeUsers?.value ?? 0}`,
+      chartType: "chart",
+      footer: {
+        direction:
+          (summaryData?.activeUsers?.trendPercentage ?? 0) > 0 ? "up" : "down",
+        text: t("Pages.Reports.trend_percent", {
+          percent: summaryData?.activeUsers?.trendPercentage ?? 0,
+        }),
+      },
+    },
+    {
+      id: "operations-count",
+      label: t("Pages.Reports.kpi_operations_count"),
+      value: `${summaryData?.totalOperations?.value ?? 0}`,
+      chartType: "line",
+      footer: {
+        direction:
+          (summaryData?.totalOperations?.trendPercentage ?? 0) > 0
+            ? "up"
+            : "down",
+        text: t("Pages.Reports.operations_footer", {
+          percent: summaryData?.totalOperations?.trendPercentage ?? 0,
+        }),
+      },
+    },
+    {
+      id: "active-spaces",
+      label: t("Pages.Reports.kpi_active_spaces"),
+      value: `${summaryData?.activeSpaces?.value ?? 0}`,
+      chartType: "chart",
+      footer: {
+        direction:
+          (summaryData?.activeSpaces?.trendPercentage ?? 0) > 0 ? "up" : "down",
+        text: t("Pages.Reports.trend_percent", {
+          percent: summaryData?.activeSpaces?.trendPercentage ?? 0,
+        }),
+      },
+    },
+    {
+      id: "avg-spend-per-space",
+      label: t("Pages.Reports.kpi_avg_spend_per_space"),
+      value: `${summaryData?.averageExpensePerSpace?.value ?? 0} ${currency}`,
+      chartType: "chart",
+      footer: {
+        direction:
+          (summaryData?.averageExpensePerSpace?.trendPercentage ?? 0) > 0
+            ? "up"
+            : "down",
+        text: t("Pages.Reports.avg_spend_footer", {
+          percent: summaryData?.averageExpensePerSpace?.trendPercentage ?? 0,
+          amount: summaryData?.averageExpensePerSpace?.value ?? 0,
+        }),
+      },
+    },
+    {
+      id: "top-spending-space",
+      label: t("Pages.Reports.kpi_top_spending_space"),
+      value: String(summaryData?.highestExpenseSpace?.name ?? ""),
+      subValue: `${summaryData?.highestExpenseSpace?.totalAmount ?? 0} ${currency}`,
+      chartType: "line",
+      footer: {
+        direction:
+          (summaryData?.highestExpenseSpace?.trendPercentage ?? 0) > 0
+            ? "up"
+            : "down",
+        text: t("Pages.Reports.trend_percent", {
+          percent: summaryData?.highestExpenseSpace?.trendPercentage ?? 0,
+        }),
+      },
+    },
+  ];
+}
+
+export default function KpiCards({ summaryData }: KpiCardsProps) {
+  const t = useTranslations();
+  const cards = summaryData ? mapSummaryToKpiCards(summaryData, t) : [];
+
   return (
     <Box
       sx={{
@@ -128,7 +175,7 @@ export default function KpiCards({ summaryData }: KpiCardsProps) {
                 />
               </Box>
 
-              <Box sx={{  minWidth: 0, flex: 1, textAlign: "left" }}>
+              <Box sx={{ minWidth: 0, flex: 1, textAlign: "left" }}>
                 <Typography
                   sx={{
                     fontSize: card.subValue ? { xs: 20, md: 22 } : { xs: 26, md: 30 },
@@ -182,7 +229,6 @@ export default function KpiCards({ summaryData }: KpiCardsProps) {
                 {card.footer.text}
               </Typography>
             </Box>
-
           </DashboardCard>
         );
       })}

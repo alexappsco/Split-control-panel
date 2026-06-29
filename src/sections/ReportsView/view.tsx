@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+import { useTranslations } from "next-intl";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import KpiCards from "./KpiCards";
 import TransactionsTable from "./TransactionsTable";
@@ -35,6 +36,8 @@ export default function ReportsView({
   totalCount,
   spacesOptions,
 }: ReportsViewProps) {
+  const t = useTranslations();
+
   return (
     <Box
       dir="rtl"
@@ -52,7 +55,7 @@ export default function ReportsView({
           flexShrink: 0,
         }}
       >
-        التقارير
+        {t("Pages.Reports.title")}
       </Typography>
 
       <KpiCards summaryData={summaryData} />

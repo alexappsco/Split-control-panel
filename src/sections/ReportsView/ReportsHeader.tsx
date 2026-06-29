@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Box,
   Button,
@@ -30,6 +31,7 @@ const selectSx = {
 };
 
 export default function ReportsHeader() {
+  const t = useTranslations();
   const [dateFilter, setDateFilter] = useState<string>(DATE_FILTER_OPTIONS[0]);
   const [categoryFilter, setCategoryFilter] = useState<string>(
     CATEGORY_FILTER_OPTIONS[0]
@@ -53,7 +55,7 @@ export default function ReportsHeader() {
           flexShrink: 0,
         }}
       >
-        التقارير
+        {t("Pages.Reports.title")}
       </Typography>
 
       <Box
@@ -73,7 +75,7 @@ export default function ReportsHeader() {
         >
           {DATE_FILTER_OPTIONS.map((opt) => (
             <MenuItem key={opt} value={opt}>
-              {opt}
+              {t(`Pages.Reports.filters.${opt}`)}
             </MenuItem>
           ))}
         </Select>
@@ -88,7 +90,7 @@ export default function ReportsHeader() {
         >
           {CATEGORY_FILTER_OPTIONS.map((opt) => (
             <MenuItem key={opt} value={opt}>
-              {opt}
+              {t(`Pages.Reports.filters.${opt}`)}
             </MenuItem>
           ))}
         </Select>
@@ -107,7 +109,7 @@ export default function ReportsHeader() {
             "&:hover": { borderColor: "#D1D5DB", bgcolor: "#F9FAFB" },
           }}
         >
-          تصدير PDF
+          {t("Pages.Reports.export_pdf")}
         </Button>
 
         <Button
@@ -124,7 +126,7 @@ export default function ReportsHeader() {
             "&:hover": { borderColor: "#D1D5DB", bgcolor: "#F9FAFB" },
           }}
         >
-          تصدير Excel
+          {t("Pages.Reports.export_excel")}
         </Button>
       </Box>
     </Box>

@@ -63,7 +63,7 @@ export default function LoginView() {
   });
 
   const defaultValues = {
-    email: 'admin@sanwan.com',
+    email: 'admin@rassi.com',
     password: 'Admin@12345',
   };
 

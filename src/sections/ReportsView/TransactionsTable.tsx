@@ -1,6 +1,7 @@
 "use client";
 
 import { Tab, Tabs } from "@mui/material";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DashboardCard from "./DashboardCard";
 import { REPORT_TABS, type ReportTabValue } from "./constants";
@@ -35,6 +36,7 @@ export default function TransactionsTable({
   totalCount,
   spacesOptions,
 }: TransactionsTableProps) {
+  const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -68,7 +70,7 @@ export default function TransactionsTable({
           <Tab
             key={tab.value}
             value={tab.value}
-            label={tab.label}
+            label={t(`Pages.Reports.tabs.${tab.value}`)}
             sx={{
               fontSize: 15,
               fontWeight: activeTab === tab.value ? 700 : 500,

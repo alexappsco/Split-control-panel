@@ -32,6 +32,11 @@ export function useNavData() {
             icon: ICONS.navbar.contactUs,
           },
           {
+            title: 'notifications',
+            path: paths.controlPanel.notifications.list,
+            icon: ICONS.navbar.contactUs,
+          },
+          {
             title: 'LegalInformation.title',
             path: paths.controlPanel.marketings.root,
             icon: ICONS.navbar.marketings,

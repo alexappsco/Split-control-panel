@@ -101,6 +101,9 @@ export const paths = {
     },
     deliveryFees: {
       list: '/delivery-fees'
+    },
+    notifications: {
+      list: '/notifications',
     }
   },
 };

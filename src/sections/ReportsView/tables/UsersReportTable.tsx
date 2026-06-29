@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
   Box,
   InputAdornment,
@@ -55,6 +56,7 @@ export default function UsersReportTable({
   totalCount,
   spacesOptions,
 }: UsersReportTableProps) {
+  const t = useTranslations();
   const { updateParams, pagination } = useTabQuery("users", params);
   const { searchInput, setSearchInput } = useDebouncedSearch(
     "users",
@@ -67,7 +69,7 @@ export default function UsersReportTable({
   const rows = useMemo(() => items.map(normalizeUser), [items]);
 
   const spaceFilterOptions = [
-    { value: "", label: "المساحات" },
+    { value: "", label: t("Pages.Reports.spaces_filter") },
     ...spacesOptions.map((space) => ({
       value: space.id,
       label: space.spaceName ?? space.name ?? space.id,
@@ -81,11 +83,11 @@ export default function UsersReportTable({
       toggleSelectAll,
       rows.map((row) => row.id)
     ),
-    { id: "userName", label: "اسم المستخدم", align: "center" },
-    { id: "operationsCount", label: "عدد العمليات", align: "center" },
-    { id: "totalExpenses", label: "إجمالي المصروفات", align: "center" },
-    { id: "averageExpense", label: "متوسط الصرف", align: "center" },
-    { id: "spacesCount", label: "عدد المساحات", align: "center" },
+    { id: "userName", label: t("Pages.Reports.columns.username"), align: "center" },
+    { id: "operationsCount", label: t("Pages.Reports.columns.operations_count"), align: "center" },
+    { id: "totalExpenses", label: t("Pages.Reports.columns.total_expenses"), align: "center" },
+    { id: "averageExpense", label: t("Pages.Reports.columns.average_expense"), align: "center" },
+    { id: "spacesCount", label: t("Pages.Reports.columns.spaces_count"), align: "center" },
   ];
 
   return (
@@ -103,7 +105,7 @@ export default function UsersReportTable({
         <TextField
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="بحث..."
+          placeholder={t("Pages.Reports.search_placeholder")}
           size="small"
           slotProps={{
             input: {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
   Box,
   InputAdornment,
@@ -53,18 +54,14 @@ function normalizeExpense(row: unknown, index: number): GeneralExpense {
   };
 }
 
-const STATUS_OPTIONS = [
-  { value: "", label: "الحالة" },
-  { value: "Pending", label: "معلق" },
-  { value: "Approved", label: "مكتمل" },
-  { value: "Rejected", label: "مرفوض" },
-];
+const STATUS_VALUES = ["", "Pending", "Approved", "Rejected"] as const;
 
 export default function ExpensesReportTable({
   params,
   items,
   totalCount,
 }: ExpensesReportTableProps) {
+  const t = useTranslations();
   const { updateParams, pagination } = useTabQuery("expenses", params);
   const { searchInput, setSearchInput } = useDebouncedSearch(
     "expenses",
@@ -83,29 +80,29 @@ export default function ExpensesReportTable({
       toggleSelectAll,
       rows.map((row) => row.id)
     ),
-    { id: "date", label: "التاريخ", align: "center", renderCell: (row) => formatDate(row.date, "dd/MM/yyyy") },
-    { id: "space", label: "المساحة", align: "center" },
-    { id: "user", label: "المستخدم", align: "center" },
-    { id: "category", label: "الفئة", align: "center" },
-    { id: "amount", label: "المبلغ", align: "center" },
+    { id: "date", label: t("Pages.Reports.columns.date"), align: "center", renderCell: (row) => formatDate(row.date, "dd/MM/yyyy") },
+    { id: "space", label: t("Pages.Reports.columns.space"), align: "center" },
+    { id: "user", label: t("Pages.Reports.columns.user"), align: "center" },
+    { id: "category", label: t("Pages.Reports.columns.category"), align: "center" },
+    { id: "amount", label: t("Pages.Reports.columns.amount"), align: "center" },
     {
       id: "status",
-      label: "الحالة",
+      label: t("Pages.Reports.columns.status"),
       align: "center",
       renderCell: (row) => (
         row.status === "Approved" ? (
           <StatusChip
-            label="مكتمل"
+            label={t("Pages.Reports.status.completed")}
             variant="success"
           />
         ) : row.status === "Pending" ? (
           <StatusChip
-            label="معلق"
+            label={t("Pages.Reports.status.pending")}
             variant="warning"
           />
         ) :row.status === "Rejected" ? (
           <StatusChip
-            label="مرفوض"
+            label={t("Pages.Reports.status.rejected")}
             variant="error"
           />
         ) : null
@@ -128,7 +125,7 @@ export default function ExpensesReportTable({
         <TextField
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="بحث..."
+          placeholder={t("Pages.Reports.search_placeholder")}
           size="small"
           slotProps={{
             input: {
@@ -159,9 +156,11 @@ export default function ExpensesReportTable({
           displayEmpty
           sx={filterFieldSx}
         >
-          {STATUS_OPTIONS.map((opt) => (
-            <MenuItem key={opt.value || "all"} value={opt.value}>
-              {opt.label}
+          {STATUS_VALUES.map((value) => (
+            <MenuItem key={value || "all"} value={value}>
+              {value
+                ? t(`Pages.Reports.status.${value === "Approved" ? "completed" : value.toLowerCase()}`)
+                : t("Pages.Reports.columns.status")}
             </MenuItem>
           ))}
         </Select>

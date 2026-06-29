@@ -1378,6 +1378,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   Avatar,
   Box,
@@ -1458,6 +1459,7 @@ type UserDetailViewProps = {
 };
 
 export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
+  const t = useTranslations();
   const router = useRouter();
 
   const [groups, setGroups] = useState<SpaceType[]>(
@@ -1481,11 +1483,11 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
     return (
       <Box sx={{ textAlign: 'center', py: 8 }} dir="rtl">
         <Typography sx={{ mb: 2, color: '#6B7280' }}>
-          المستخدم غير موجود
+          {t('Pages.Users.user_not_found')}
         </Typography>
 
         <Button variant="contained" onClick={() => router.push('/users')}>
-          العودة للمستخدمين
+          {t('Pages.Users.back_to_users')}
         </Button>
       </Box>
     );
@@ -1493,17 +1495,17 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
 
   const tabs = [
     {
-      label: 'الكل',
+      label: t('Pages.Users.all'),
       value: 'all' as const,
       count: groups.length,
     },
     {
-      label: 'مفعل',
+      label: t('Pages.Users.active'),
       value: 'active' as const,
       count: activeCount,
     },
     {
-      label: 'معطل',
+      label: t('Pages.Users.inactive'),
       value: 'inactive' as const,
       count: inactiveCount,
     },
@@ -1541,19 +1543,19 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
     ),
     {
       id: 'spaceName',
-      label: 'اسم المجموعة',
+      label: t('Pages.Users.group_name'),
       align: 'center',
       width: '30%',
     },
     {
       id: 'categoryName',
-      label: 'الفئة',
+      label: t('Pages.Users.category'),
       align: 'center',
       width: '25%',
     },
     {
       id: 'status',
-      label: 'الحالة',
+      label: t('Global.Label.status'),
       align: 'center',
       width: '20%',
       renderCell: (row) => {
@@ -1575,7 +1577,7 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
                 color: '#4b5563',
               }}
             >
-              {active ? 'مفعل' : 'معطل'}
+              {active ? t('Pages.Users.active') : t('Pages.Users.inactive')}
             </Typography>
 
             <Switch
@@ -1601,12 +1603,12 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
 
   const statusBadge = user.isActive
     ? {
-      label: 'مفعل',
+      label: t('Pages.Users.active'),
       bg: '#ECFDF3',
       color: '#027A48',
     }
     : {
-      label: 'معطل',
+      label: t('Pages.Users.inactive'),
       bg: '#F2F4F7',
       color: '#667085',
     };
@@ -1616,7 +1618,7 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
       <CustomBreadcrumbs
         links={[
           {
-            name: 'المستخدمين',
+            name: t('Pages.Users.users_breadcrumb'),
             href: '/users',
           },
           {
@@ -1634,7 +1636,7 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
           mb: 2,
         }}
       >
-        بيانات المستخدم
+        {t('Pages.Users.user_details')}
       </Typography>
 
       <Card
@@ -1676,15 +1678,15 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
             <Grid2 container spacing={2}>
               {[
                 {
-                  label: 'اسم المستخدم',
+                  label: t('Pages.Users.username'),
                   value: user.name,
                 },
                 {
-                  label: 'البريد الإلكتروني',
+                  label: t('Pages.Users.email'),
                   value: user.email,
                 },
                 {
-                  label: 'رقم الهاتف',
+                  label: t('Pages.Users.phone_number'),
                   value: user.phoneNumber,
                 },
               ].map((field) => (
@@ -1719,7 +1721,7 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
                     mb: 0.5,
                   }}
                 >
-                  الحالة
+                  {t('Global.Label.status')}
                 </Typography>
 
                 <Chip

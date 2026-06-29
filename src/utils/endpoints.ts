@@ -37,9 +37,14 @@ export const endpoints = {
     space: (id: string) => `/Admin/users/${id}/spaces`,
     update:(id:string) => `/Admin/users/${id}/change-status`
   },
-    contact:{
+  contact:{
     list: "/Admin/contact-us",
     put: "/Admin/contact-us",
   },
+  notifications:{
+    list:"/Admin/notifications",
+    single: (id: string) => `/Admin/notifications/${id}`,
+    post: "/Admin/notifications/send",
+  }
 
 };

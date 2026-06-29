@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { Box, InputAdornment, TextField } from "@mui/material";
 import Iconify from "src/components/iconify";
 import SimpleTable from "src/components/SimpleTable";
@@ -38,6 +39,7 @@ export default function CategoriesReportTable({
   items,
   totalCount,
 }: CategoriesReportTableProps) {
+  const t = useTranslations();
   const { updateParams, pagination } = useTabQuery("categories", params);
   const { searchInput, setSearchInput } = useDebouncedSearch(
     "categories",
@@ -55,10 +57,10 @@ export default function CategoriesReportTable({
       toggleSelectAll,
       rows.map((row) => row.id)
     ),
-    { id: "category", label: "الفئة", align: "center" },
-    { id: "totalExpenses", label: "إجمالي المصروفات", align: "center" },
-    { id: "operationsCount", label: "عدد العمليات", align: "center" },
-    { id: "percentageOfTotal", label: "النسبة من الإجمالي", align: "center" },
+    { id: "category", label: t("Pages.Reports.columns.category"), align: "center" },
+    { id: "totalExpenses", label: t("Pages.Reports.columns.total_expenses"), align: "center" },
+    { id: "operationsCount", label: t("Pages.Reports.columns.operations_count"), align: "center" },
+    { id: "percentageOfTotal", label: t("Pages.Reports.columns.percentage_of_total"), align: "center" },
   ];
 
   return (
@@ -67,7 +69,7 @@ export default function CategoriesReportTable({
         <TextField
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="بحث..."
+          placeholder={t("Pages.Reports.search_placeholder")}
           size="small"
           slotProps={{
             input: {

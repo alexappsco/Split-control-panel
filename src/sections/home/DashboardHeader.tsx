@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Grid } from "@mui/system";
 import { Box, Paper, Typography } from "@mui/material";
 
@@ -17,9 +18,11 @@ interface DashboardHeaderProps {
 export default function DashboardHeader({
   stats,
 }: DashboardHeaderProps) {
+  const t = useTranslations();
+
   const cards = [
     {
-      label: "الأعضاء",
+      label: t("Pages.Home.members"),
       value: stats.subscribersCount,
       icon: "/assets/icons/home/members.svg",
       bg: "#EBF9F9",
@@ -27,7 +30,7 @@ export default function DashboardHeader({
       color: "#004B50",
     },
     {
-      label: "عدد العمليات المنفذة",
+      label: t("Pages.Home.executed_operations_count"),
       value: stats.executedOperationsCount,
       icon: "/assets/icons/home/expenses.svg",
       bg: "#EBF9F9",
@@ -35,7 +38,7 @@ export default function DashboardHeader({
       color: "#006C9C",
     },
     {
-      label: "عدد المصروفات المسجلة",
+      label: t("Pages.Home.recorded_expenses_count"),
       value: stats.recordedExpensesCount,
       icon: "/assets/icons/home/expenses.svg",
       bg: "#EBF9F9",
@@ -43,7 +46,7 @@ export default function DashboardHeader({
       color: "#006C9C",
     },
     {
-      label: "قيمة المصروفات المسجلة",
+      label: t("Pages.Home.recorded_expenses_value"),
       value: stats.recordedExpensesValue,
       icon: "/assets/icons/home/expenses.svg",
       bg: "#EBF9F9",
@@ -51,7 +54,7 @@ export default function DashboardHeader({
       color: "#006C9C",
     },
     {
-      label: "إجمالي المساحات",
+      label: t("Pages.Home.total_spaces"),
       value: stats.totalSpacesCount,
       icon: "/assets/icons/home/spaces.svg",
       bg: "#EBF9F9",

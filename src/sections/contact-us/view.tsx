@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import XIcon from "@mui/icons-material/X";
 import { useRouter } from "next/navigation";
 import AddIcon from "@mui/icons-material/Add";
@@ -77,13 +78,13 @@ const SOCIAL_PLATFORM_OPTIONS: PlatformConfig[] = [
 const FIXED_FIELDS: PlatformConfig[] = [
   {
     platformName: "email",
-    title: "E-mail",
+    title: "email",
     color: "#D50000",
     icon: <EmailIcon />,
   },
   {
     platformName: "phone",
-    title: "Phone Number",
+    title: "phone",
     color: "#2F3941",
     icon: <PhoneIcon />,
   },
@@ -110,6 +111,7 @@ type ContactUsSectionProps = {
 };
 
 export default function ContactUsSection({ initialData }: ContactUsSectionProps) {
+  const t = useTranslations();
   const router = useRouter();
   const [formData, setFormData] = useState<ContactUsData>(initialData);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -185,12 +187,12 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
     setSaving(false);
 
     if (!response.success) {
-      setError(response.error || "فشل حفظ البيانات");
+      setError(response.error || t("Pages.ContactUs.save_failed"));
       return;
     }
 
     setFormData(payload);
-    setSuccess("تم حفظ التغييرات بنجاح");
+    setSuccess(t("Pages.ContactUs.save_success"));
     router.refresh();
   };
 
@@ -242,7 +244,7 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
         <IconButton
           onClick={onDelete}
           sx={{ color: "#9CA3AF", flexShrink: 0 }}
-          aria-label="حذف"
+          aria-label={t("Pages.ContactUs.delete")}
         >
           <DeleteIcon />
         </IconButton>
@@ -268,7 +270,7 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
             fontWeight: 700,
           }}
         >
-          تواصل معنا
+          {t("Pages.ContactUs.title")}
         </Typography>
 
         <Button
@@ -288,7 +290,7 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
             },
           }}
         >
-          {saving ? <CircularProgress size={22} color="inherit" /> : "حفظ التغييرات"}
+          {saving ? <CircularProgress size={22} color="inherit" /> : t("Pages.ContactUs.save_changes")}
         </Button>
       </Box>
 
@@ -330,7 +332,7 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
               fontSize: 16,
             }}
           >
-            وسائل التواصل المضافة
+            {t("Pages.ContactUs.social_media_added")}
           </Typography>
 
           <IconButton
@@ -443,7 +445,7 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
                           lineHeight: 1.3,
                         }}
                       >
-                        تمت إضافة واحد مسبقاً
+                        {t("Pages.ContactUs.already_added")}
                       </Typography>
                     )}
                   </Box>
@@ -491,7 +493,7 @@ export default function ContactUsSection({ initialData }: ContactUsSectionProps)
                   config.color,
                   link.url,
                   (value) => updateSocialLink(index, value),
-                  `رابط ${config.title}`,
+                  t("Pages.ContactUs.link_placeholder", { platform: config.title }),
                   () => removeSocialLink(index)
                 )}
               </Box>

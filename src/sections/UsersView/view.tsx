@@ -3,6 +3,7 @@
 import type { HeadCell } from "src/components/SimpleTable/types";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Iconify from "src/components/iconify";
 import { endpoints } from "src/utils/endpoints";
 import { editData } from "src/utils/crud-fetch-api";
@@ -72,6 +73,7 @@ function createCheckboxColumn(
 }
 
 export default function UsersView({ users: initialUsers }: UsersViewProps) {
+  const t = useTranslations();
   const router = useRouter();
   const [users, setUsers] = useState<UsersRow[]>(initialUsers);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
@@ -106,28 +108,28 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
 
   const tabs = [
     {
-      label: "الكل",
+      label: t("Pages.Users.all"),
       value: "all" as const,
       count: users.length,
       bgColor: "#1f2937",
       textColor: "#fff",
     },
     {
-      label: "مفعل",
+      label: t("Pages.Users.active"),
       value: "active" as const,
       count: activeCount,
       bgColor: "#d1fae5",
       textColor: "#059669",
     },
     {
-      label: "معطل",
+      label: t("Pages.Users.inactive"),
       value: "inactive" as const,
       count: inactiveCount,
       bgColor: "#f3f4f6",
       textColor: "#6b7280",
     },
     {
-      label: "محظور",
+      label: t("Pages.Users.blocked"),
       value: "blocked" as const,
       count: blockedCount,
       bgColor: "#fee2e2",
@@ -180,7 +182,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
     ),
     {
       id: "name",
-      label: "الاسم",
+      label: t("Pages.Users.name"),
       align: "center",
       width: "28%",
       renderCell: (row) => (
@@ -204,11 +206,11 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
         </Box>
       ),
     },
-    { id: "phoneNumber", label: "رقم الهاتف", align: "center", width: "22%" },
-    { id: "spacesCount", label: "عدد المجموعات", align: "center", width: "16%" },
+    { id: "phoneNumber", label: t("Pages.Users.phone_number"), align: "center", width: "22%" },
+    { id: "spacesCount", label: t("Pages.Users.groups_count"), align: "center", width: "16%" },
     {
       id: "status",
-      label: "الحالة",
+      label: t("Global.Label.status"),
       align: "center",
       width: "18%",
       renderCell: (row) => {
@@ -231,7 +233,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
                 whiteSpace: "nowrap",
               }}
             >
-              {active ? "مفعل" : "معطل"}
+              {active ? t("Pages.Users.active") : t("Pages.Users.inactive")}
             </Typography>
             <Switch
               size="small"
@@ -256,14 +258,14 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
 
   const actions = [
     {
-      label: "عرض",
+      label: t("Global.Action.view"),
       icon: <Iconify icon="solar:eye-bold" />,
       onClick: (row: UsersRow) => {
         router.push(`/users/${row.id}`);
       },
     },
     {
-      label: "حذف",
+      label: t("Global.Action.delete"),
       icon: <Iconify icon="solar:trash-bin-trash-bold" />,
       sx: { color: "error.main" },
       onClick: (row: UsersRow) => {
@@ -286,7 +288,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
         }}
       >
         <Typography variant="h4" sx={{ fontWeight: 800, color: "#111827" }}>
-          إدارة المستخدمين
+          {t("Pages.Users.title")}
         </Typography>
 
         <Button
@@ -304,7 +306,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
             textTransform: "none",
           }}
         >
-          إضافة
+          {t("Global.Action.add")}
         </Button>
       </Box>
 
@@ -370,7 +372,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
             <TextField
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="بحث..."
+              placeholder={t("Global.Label.search")}
               size="small"
               fullWidth
               slotProps={{

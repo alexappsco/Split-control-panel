@@ -199,6 +199,7 @@
 import type { ApexOptions } from "apexcharts";
 
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { Box, Card, Typography } from "@mui/material";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
@@ -220,6 +221,7 @@ interface ExpensesChartProps {
 export default function ExpensesChart({
   expensesBreakdown,
 }: ExpensesChartProps) {
+  const t = useTranslations();
   const series = [
     expensesBreakdown.approvedPercentage,
     expensesBreakdown.pendingPercentage,
@@ -292,7 +294,7 @@ export default function ExpensesChart({
           }}
           color="text.primary"
         >
-          المصروفات
+          {t("Pages.Home.expenses_title")}
         </Typography>
 
         <Box
@@ -336,7 +338,7 @@ export default function ExpensesChart({
                 color: "#64748B",
               }}
             >
-              Total
+              {t("Pages.Home.total")}
             </Typography>
 
             <Typography
@@ -366,17 +368,23 @@ export default function ExpensesChart({
         }}
       >
         <LegendItem
-          label={`مكتملة (${expensesBreakdown.approvedAmount.toLocaleString()})`}
+          label={t("Pages.Home.completed_with_amount", {
+            amount: expensesBreakdown.approvedAmount.toLocaleString(),
+          })}
           color="#35C57A"
         />
 
         <LegendItem
-          label={`معلقة (${expensesBreakdown.pendingAmount.toLocaleString()})`}
+          label={t("Pages.Home.pending_with_amount", {
+            amount: expensesBreakdown.pendingAmount.toLocaleString(),
+          })}
           color="#F5B11A"
         />
 
         <LegendItem
-          label={`مرفوضة (${expensesBreakdown.rejectedAmount.toLocaleString()})`}
+          label={t("Pages.Home.rejected_with_amount", {
+            amount: expensesBreakdown.rejectedAmount.toLocaleString(),
+          })}
           color="#D64545"
         />
       </Box>

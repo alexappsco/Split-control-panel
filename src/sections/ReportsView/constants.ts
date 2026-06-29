@@ -6,13 +6,13 @@ export const CARD_SX = {
   p: 2.5,
 } as const;
 
-export const DATE_FILTER_OPTIONS = ["شهري", "أسبوعي", "يومي"] as const;
+export const DATE_FILTER_OPTIONS = ["monthly", "weekly", "daily"] as const;
 export const CATEGORY_FILTER_OPTIONS = [
-  "جميع الفئات",
-  "سكن",
-  "مواصلات",
-  "طعام",
-  "أخرى",
+  "all_categories",
+  "housing",
+  "transportation",
+  "food",
+  "other",
 ] as const;
 
 export const CHART_ASSETS = {
@@ -27,10 +27,10 @@ export type KpiChartType = "line" | "bar" | "chart";
 
 
 export const REPORT_TABS = [
-  { value: "expenses", label: "المصروفات العامة" },
-  { value: "spaces", label: "المساحات" },
-  { value: "users", label: "المستخدمين" },
-  { value: "categories", label: "الفئات" },
+  { value: "expenses" },
+  { value: "spaces" },
+  { value: "users" },
+  { value: "categories" },
 ] as const;
 
 export type ReportTabValue = (typeof REPORT_TABS)[number]["value"];

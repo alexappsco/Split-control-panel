@@ -1,49 +1,35 @@
-export interface Notifications {
+export interface AdminNotification {
   id: string;
-  userId: string;
-  deviceToken: string;
-  title: string;
-  body: string;
-  fcmNotificationType: string;
+  titleAr: string;
+  titleEn: string;
+  bodyAr: string;
+  bodyEn: string;
+  receiverUserId: string;
+  receiverUserName: string;
   isRead: boolean;
-  creationTime: string; // ISO date string
-}
-export interface Notification {
-    id: string;
-    titleAr: string;
-    titleEn: string;
-    descriptionAr: string;
-    descriptionEn: string;
-    readDate: string;
-    creationTime: string;
+  isSuccess: boolean;
+  creationTime: string;
+  deviceToken?: string;
+  receiverUserPhone?: string;
+  senderUserId?: string;
+  type?: string;
+  errorMessage?: string;
 }
 
-
-
-export interface ApiResponse<T> {
-    success: boolean;
-    data: T;
-    message: string;
-    status: number;
-  }
-
-  export interface NotificationData {
-    code: number;
-    message: string;
-    data: {
-      totalCount: number;
-      items: Notification[];
-    };
-  }
-
-  export type NotificationResponse = ApiResponse<NotificationData>;
-
-  export interface Clients {
-    id: string;
-    name: string;
-    phoneNumber: string;
-    profileImage: string | null;
+export interface NotificationsListResponse {
+  totalCount: number;
+  items: AdminNotification[];
 }
+
+export interface SendNotificationRequest {
+  titleAr: string;
+  titleEn: string;
+  bodyAr: string;
+  bodyEn: string;
+  sendToAll: boolean;
+  userIds: string[];
+}
+
 export const FCM_NOTIFICATION_TYPES = [
   'SystemMaintenance',
   'SystemAlert',
@@ -61,5 +47,5 @@ export const FCM_NOTIFICATION_TYPES = [
   'Warning',
   'Error',
   'Success',
-  'SystemUpdate'
-];
+  'SystemUpdate',
+] as const;

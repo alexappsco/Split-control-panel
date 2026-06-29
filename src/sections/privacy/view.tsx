@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Editor from "src/components/Editor";
 import { useRouter } from "next/navigation";
 import { endpoints } from "src/utils/endpoints";
@@ -21,6 +22,7 @@ type PrivacyProps = {
 };
 
 export default function Privacy({ initialData }: PrivacyProps) {
+  const t = useTranslations();
   const router = useRouter();
   const [formData, setFormData] = useState<PrivacyPolicyData>(initialData);
   const [saving, setSaving] = useState(false);
@@ -48,12 +50,12 @@ export default function Privacy({ initialData }: PrivacyProps) {
     setSaving(false);
 
     if (!response.success) {
-      setError(response.error || "فشل حفظ البيانات");
+      setError(response.error || t("Pages.PrivacyPolicy.save_failed"));
       return;
     }
 
     setFormData(payload);
-    setSuccess("تم حفظ التغييرات بنجاح");
+    setSuccess(t("Pages.PrivacyPolicy.save_success"));
     router.refresh();
   };
 
@@ -85,7 +87,7 @@ export default function Privacy({ initialData }: PrivacyProps) {
               textAlign: "right",
             }}
           >
-     pp     sss  {formData.titleAr || "سياسة الخصوصية"}
+            {formData.titleAr || t("Pages.PrivacyPolicy.title")}
           </Typography>
 
           <Button
@@ -102,7 +104,7 @@ export default function Privacy({ initialData }: PrivacyProps) {
             {saving ? (
               <CircularProgress size={22} color="inherit" />
             ) : (
-              "حفظ التغييرات"
+              t("Pages.PrivacyPolicy.save_changes")
             )}
           </Button>
         </Box>
@@ -140,7 +142,7 @@ export default function Privacy({ initialData }: PrivacyProps) {
             textAlign: "right",
           }}
         >
-          النص بالعربي
+          {t("Pages.PrivacyPolicy.text_ar")}
         </Typography>
 
         <TextField
@@ -149,7 +151,7 @@ export default function Privacy({ initialData }: PrivacyProps) {
           onChange={(e) =>
             setFormData((current) => ({ ...current, titleAr: e.target.value }))
           }
-          placeholder="عنوان سياسة الخصوصية بالعربي"
+          placeholder={t("Pages.PrivacyPolicy.title_placeholder_ar")}
           sx={{ mb: 2 }}
         />
 
@@ -178,7 +180,7 @@ export default function Privacy({ initialData }: PrivacyProps) {
             textAlign: "right",
           }}
         >
-          النص بالإنجليزي
+          {t("Pages.PrivacyPolicy.text_en")}
         </Typography>
 
         <TextField
@@ -187,7 +189,7 @@ export default function Privacy({ initialData }: PrivacyProps) {
           onChange={(e) =>
             setFormData((current) => ({ ...current, titleEn: e.target.value }))
           }
-          placeholder="Privacy Policy title in English"
+          placeholder={t("Pages.PrivacyPolicy.title_placeholder_en")}
           sx={{ mb: 2 }}
         />
 

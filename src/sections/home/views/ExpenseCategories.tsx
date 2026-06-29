@@ -103,6 +103,7 @@
 // }
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Box,
   Card,
@@ -122,6 +123,8 @@ export default function ExpenseCategories({
   totalSpacesCount,
   categories,
 }: ExpenseCategoriesProps) {
+  const t = useTranslations();
+
   return (
     <Card
       elevation={0}
@@ -140,7 +143,7 @@ export default function ExpenseCategories({
           mb: 4,
         }}
       >
-        أنواع المساحات حسب الفئة
+        {t("Pages.Home.space_types_by_category")}
       </Typography>
 
       {categories.map((item, index) => {
