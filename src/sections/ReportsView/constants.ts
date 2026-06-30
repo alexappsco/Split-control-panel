@@ -49,6 +49,7 @@ export type GeneralExpense = {
 
 export type ReportSpace = {
   id: string;
+  spaceId: string;
   spaceName: string;
   operationsCount: string;
   totalExpenses: string;

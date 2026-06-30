@@ -9,12 +9,14 @@ import {
   Select,
   TextField,
   type SelectChangeEvent,
+  IconButton,
 } from "@mui/material";
 import Iconify from "src/components/iconify";
 import SimpleTable from "src/components/SimpleTable";
 import type { HeadCell } from "src/components/SimpleTable/types";
 import type { ReportSpace } from "../constants";
 import type { SpacesTabParams } from "../reports-params";
+import { useRouter } from "next/navigation";
 import {
   asRecord,
   createCheckboxColumn,
@@ -43,6 +45,7 @@ function normalizeSpace(
 
   return {
     id: String(data.id ?? index),
+    spaceId: String(data.spaceId ?? data.id ?? ""), 
     spaceName: String(data.spaceName ?? data.name ?? ""),
     operationsCount: String(
       data.operationsCount ??
@@ -68,6 +71,7 @@ export default function SpacesReportTable({
 }: SpacesReportTableProps) {
   const t = useTranslations();
   const { formatDate } = useFormat();
+  const router = useRouter();
   const { updateParams, pagination } = useTabQuery("spaces", params);
   const { searchInput, setSearchInput } = useDebouncedSearch(
     "spaces",
@@ -93,62 +97,48 @@ export default function SpacesReportTable({
     { id: "operationsCount", label: t("Pages.Reports.columns.operations_count"), align: "center" },
     { id: "totalExpenses", label: t("Pages.Reports.columns.total_expenses"), align: "center" },
     { id: "membersCount", label: t("Pages.Reports.columns.members_count"), align: "center" },
-    { id: "lastActivityDate", label: t("Pages.Reports.columns.last_activity"), align: "center", renderCell: (row) => formatDate(row.lastActivityDate as any, "dd/MM/yyyy") },
+    { 
+      id: "lastActivityDate", 
+      label: t("Pages.Reports.columns.last_activity"), 
+      align: "center", 
+      renderCell: (row) => formatDate(row.lastActivityDate as any, "dd/MM/yyyy") 
+    },
+    { 
+      id: "actions" as any, 
+      label: "", 
+      align: "center", 
+      renderCell: (row) => (
+        <IconButton 
+          size="small" 
+          onClick={() => router.push(`/spaces/${(row as any).spaceId}`)}
+        >
+          <Iconify icon="solar:eye-linear" width={20} sx={{ color: 'text.secondary' }} />
+        </IconButton>
+      ) 
+    },
   ];
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: { xs: "stretch", sm: "center" },
-          justifyContent: "space-between",
-          gap: 2,
-          mb: 2.5,
-        }}
-      >
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, alignItems: { xs: "stretch", sm: "center" }, justifyContent: "space-between", gap: 2, mb: 2.5 }}>
         <TextField
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder={t("Pages.Reports.search_placeholder")}
           size="small"
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Iconify
-                    icon="solar:magnifer-linear"
-                    width={20}
-                    sx={{ color: "#9CA3AF" }}
-                  />
-                </InputAdornment>
-              ),
-            },
-          }}
+          slotProps={{ input: { startAdornment: ( <InputAdornment position="start"><Iconify icon="solar:magnifer-linear" width={20} sx={{ color: "#9CA3AF" }} /></InputAdornment> ), }, }}
           sx={searchFieldSx}
         />
-
         <Select
           value={params.MinMembersCount}
-          onChange={(e: SelectChangeEvent) => {
-            clearSelection();
-            updateParams({
-              MinMembersCount: e.target.value || null,
-              SkipCount: "0",
-            });
-          }}
+          onChange={(e: SelectChangeEvent) => { clearSelection(); updateParams({ MinMembersCount: e.target.value || null, SkipCount: "0", }); }}
           size="small"
           displayEmpty
           sx={filterFieldSx}
         >
           {MEMBERS_FILTER_VALUES.map((value) => (
             <MenuItem key={value || "all"} value={value}>
-              {!value
-                ? t("Pages.Reports.members_filter")
-                : value === "5"
-                  ? t("Pages.Reports.members_count_plus", { count: value })
-                  : t("Pages.Reports.members_count", { count: value })}
+              {!value ? t("Pages.Reports.members_filter") : value === "5" ? t("Pages.Reports.members_count_plus", { count: value }) : t("Pages.Reports.members_count", { count: value })}
             </MenuItem>
           ))}
         </Select>
@@ -157,10 +147,7 @@ export default function SpacesReportTable({
       <SimpleTable<ReportSpace>
         data={rows}
         headCells={headCells}
-        serverPagination={{
-          ...pagination,
-          count: totalCount || rows.length,
-        }}
+        serverPagination={{ ...pagination, count: totalCount || rows.length, }}
       />
     </Box>
   );

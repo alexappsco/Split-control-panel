@@ -45,6 +45,9 @@ export const endpoints = {
     list:"/Admin/notifications",
     single: (id: string) => `/Admin/notifications/${id}`,
     post: "/Admin/notifications/send",
+  },
+  spaces:{
+    single:(id:string) => `/Admin/reports/spaces/${id}`
   }
 
 };
