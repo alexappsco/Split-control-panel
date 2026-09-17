@@ -1481,7 +1481,7 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
 
   if (!user) {
     return (
-      <Box sx={{ textAlign: 'center', py: 8 }} dir="rtl">
+      <Box sx={{ textAlign: 'center', py: 8 }}>
         <Typography sx={{ mb: 2, color: '#6B7280' }}>
           {t('Pages.Users.user_not_found')}
         </Typography>
@@ -1614,7 +1614,7 @@ export default function UserDetailView({ user, spaces }: UserDetailViewProps) {
     };
 
   return (
-    <Box dir="rtl">
+    <Box>
       <CustomBreadcrumbs
         links={[
           {

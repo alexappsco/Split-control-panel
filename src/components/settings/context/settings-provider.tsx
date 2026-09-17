@@ -1,7 +1,7 @@
 'use client';
 
 import isEqual from 'lodash/isEqual';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { useLocalStorage } from 'src/hooks/use-local-storage';
 
 import { SettingsValueProps } from '../types';
@@ -21,6 +21,12 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  useEffect(() => {
+    if (state.themeDirection !== defaultSettings.themeDirection) {
+      update('themeDirection', defaultSettings.themeDirection);
+    }
+  }, [defaultSettings.themeDirection, state.themeDirection, update]);
+
   // Drawer
   const onToggleDrawer = useCallback(() => {
     setOpenDrawer((prev) => !prev);
@@ -35,6 +41,7 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
   const memoizedValue = useMemo(
     () => ({
       ...state,
+      themeDirection: defaultSettings.themeDirection,
       onUpdate: update,
       // Reset
       canReset,
@@ -44,11 +51,11 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
       onToggle: onToggleDrawer,
       onClose: onCloseDrawer,
     }),
-    [reset, update, state, canReset, openDrawer, onCloseDrawer, onToggleDrawer]
+    [reset, update, state, defaultSettings.themeDirection, canReset, openDrawer, onCloseDrawer, onToggleDrawer]
   );
 
   return (
-    <SettingsContext.Provider value={{ ...memoizedValue, ...defaultSettings }}>
+    <SettingsContext.Provider value={memoizedValue}>
       {children}
     </SettingsContext.Provider>
   );

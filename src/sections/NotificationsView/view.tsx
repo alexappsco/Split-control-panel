@@ -212,7 +212,7 @@ export default function NotificationsView({
   }, [notifications]);
 
   return (
-    <Box sx={{ textAlign: "right" }} dir="rtl">
+    <Box>
       <Box
         sx={{
           display: "flex",

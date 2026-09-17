@@ -8,12 +8,15 @@ import {
   Typography,
   DialogContent,
 } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 type DeleteDialogProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
   loading?: boolean;
+  title?: string;
+  description?: string;
 };
 
 export default function DeleteDialog({
@@ -21,30 +24,30 @@ export default function DeleteDialog({
   onClose,
   onConfirm,
   loading = false,
+  title,
+  description,
 }: DeleteDialogProps) {
+  const t = useTranslations();
+
   return (
     <Dialog
       open={open}
       onClose={onClose}
       fullWidth
       maxWidth={false}
-      dir="rtl"
       PaperProps={{
-          sx: {
-            width: {
-              xs: '92%',
-              sm: '620px',
-            },
-            maxWidth: '620px',
-            borderRadius: '28px',
-
-            border: 'none',
-            outline: 'none',
-            backgroundImage: 'none',
-
-            boxShadow:
-              '0px 12px 35px rgba(0,0,0,.10)',
+        sx: {
+          width: {
+            xs: '92%',
+            sm: '620px',
           },
+          maxWidth: '620px',
+          borderRadius: '28px',
+          border: 'none',
+          outline: 'none',
+          backgroundImage: 'none',
+          boxShadow: '0px 12px 35px rgba(0,0,0,.10)',
+        },
       }}
     >
       <DialogContent
@@ -56,16 +59,15 @@ export default function DeleteDialog({
           position: 'relative',
         }}
       >
-
         <IconButton
           onClick={onClose}
-          sx={{
+          sx={(theme) => ({
             position: 'absolute',
             top: 18,
-            left: 18,
+            ...(theme.direction === 'rtl' ? { left: 18 } : { right: 18 }),
             p: 0,
             color: '#4A63D3',
-          }}
+          })}
         >
           <CloseIcon
             sx={{
@@ -74,32 +76,29 @@ export default function DeleteDialog({
           />
         </IconButton>
 
-
         <Typography
           sx={{
             fontSize: '20px',
             fontWeight: 700,
-            textAlign: 'right',
+            textAlign: 'start',
             color: '#101828',
+            mb: 4,
+          }}
+        >
+          {title ?? t('Global.Action.delete')}
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: '18px',
+            fontWeight: 600,
+            textAlign: 'start',
+            color: '#475467',
             mb: 6,
           }}
         >
-          الحذف
+          {description ?? (t('Global.Label.name_ar') === 'الاسم بالعربية' ? 'هل أنت متأكد من أنك تريد الحذف؟' : 'Are you sure you want to delete?')}
         </Typography>
-
-
-        <Typography
-          sx={{
-            fontSize: '20px',
-            fontWeight: 700,
-            textAlign: 'right',
-            color: '#101828',
-            mb: 8,
-          }}
-        >
-          هل انت متاكد من انك تريد الحذف ؟
-        </Typography>
-
 
         <Box
           sx={{
@@ -114,40 +113,39 @@ export default function DeleteDialog({
             disableElevation
             variant="contained"
             sx={{
-              width: '110px',
+              minWidth: '110px',
               height: '40px',
               borderRadius: '8px',
               background: '#FF6257',
-              fontSize: '20px',
+              fontSize: '16px',
               fontWeight: 700,
               boxShadow: 'none',
-
               '&:hover': {
                 background: '#FF554A',
                 boxShadow: 'none',
               },
             }}
           >
-            حذف
+            {t('Global.Action.delete')}
           </Button>
 
           <Button
             onClick={onClose}
+            disabled={loading}
             sx={{
-              width: '110px',
+              minWidth: '110px',
               height: '40px',
               borderRadius: '8px',
               border: '2px solid #98A2B3',
               color: '#344054',
-              fontSize: '20px',
+              fontSize: '16px',
               fontWeight: 700,
-
               '&:hover': {
                 border: '2px solid #98A2B3',
               },
             }}
           >
-            الغاء
+            {t('Global.Action.cancel')}
           </Button>
         </Box>
       </DialogContent>

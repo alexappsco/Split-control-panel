@@ -51,7 +51,6 @@ export default function HomeView({
 
   return (
     <Box
-      dir="rtl"
       sx={{
         display: "flex",
         flexDirection: "column",

@@ -88,7 +88,7 @@ export default function SendNotificationForm({
     .filter(Boolean) as string[];
 
   return (
-    <Box dir="rtl">
+    <Box>
       <Box
         sx={{
           display: "flex",

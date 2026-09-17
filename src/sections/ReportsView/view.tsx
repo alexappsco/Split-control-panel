@@ -40,7 +40,6 @@ export default function ReportsView({
 
   return (
     <Box
-      dir="rtl"
       sx={{
         display: "flex",
         flexDirection: "column",

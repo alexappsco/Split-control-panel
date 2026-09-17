@@ -1,8 +1,7 @@
 import Link from '@mui/material/Link';
-import { useTranslations } from 'next-intl';
 import Box, { BoxProps } from '@mui/material/Box';
 import { RouterLink } from 'src/routes/components';
-import { Typography, TypographyProps } from '@mui/material';
+import { TypographyProps } from '@mui/material';
 
 import SvgColor from '../svg-color';
 import Image from 'next/image';
@@ -16,7 +15,6 @@ export interface LogoProps extends BoxProps {
 }
 
 const Logo = ({ disabledLink = false, enableText = false, sx, textProps }: LogoProps) => {
-  const t = useTranslations();
 
   const logo = (
     <Box component="div" sx={{ display: 'flex', width: 'auto', height: 'auto', cursor: 'pointer' }}>

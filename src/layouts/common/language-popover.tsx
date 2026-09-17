@@ -7,32 +7,38 @@ import IconButton from '@mui/material/IconButton';
 import { varHover } from 'src/components/animate';
 import { allLocales } from 'src/i18n/config-locale';
 import { useCurrentLocale } from 'src/utils/locale-utils';
-import { clientRedirect } from 'src/actions/client-redirect';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'src/i18n/routing';
+import { useSearchParams } from 'next/navigation';
+import { useSettingsContext } from 'src/components/settings';
+import { COOKIES_KEYS } from 'src/config-global';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
 export default function LanguagePopover({ large = false }: { large?: boolean }) {
   const popover = usePopover();
+  const settings = useSettingsContext();
 
   const currentLocale = useCurrentLocale();
   const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const handleChangeLang = useCallback(
-    // (newLocale: LocaleType) => {
     (newLocale: string) => {
       if (currentLocale.value !== newLocale) {
-        (async () => {
-          await clientRedirect(
-            `${pathname.replace(`/${currentLocale.value}`, `/${newLocale}`)}${searchParams ? `?${searchParams.toString()}` : ''}`
-          );
-        })();
+        const nextDir = newLocale === 'ar' ? 'rtl' : 'ltr';
+        document.cookie = `${COOKIES_KEYS.lang}=${newLocale};path=/;max-age=31536000`;
+        settings.onUpdate('themeDirection', nextDir);
+
+        const query = searchParams?.toString();
+        const targetUrl = query ? `${pathname}?${query}` : pathname;
+
+        router.replace(targetUrl, { locale: newLocale as 'ar' | 'en' });
       }
       popover.onClose();
     },
-    [currentLocale, pathname, popover, searchParams]
+    [currentLocale.value, pathname, popover, router, searchParams, settings]
   );
 
   return (

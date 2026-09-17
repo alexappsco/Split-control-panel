@@ -4,10 +4,12 @@ import type { HeadCell } from "src/components/SimpleTable/types";
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useSnackbar } from "src/components/snackbar";
 import Iconify from "src/components/iconify";
 import { endpoints } from "src/utils/endpoints";
-import { editData } from "src/utils/crud-fetch-api";
-import { useMemo, useState, useEffect } from "react";
+import { editData, deleteData } from "src/utils/crud-fetch-api";
+import { useQuery } from "src/components/use-query";
+import { useMemo, useState, useEffect, useTransition } from "react";
 import SimpleTable from "src/components/SimpleTable";
 import DeleteDialog from "src/components/dialog/delete";
 import {
@@ -22,9 +24,13 @@ import {
   InputAdornment,
 } from "@mui/material";
 
-type StatusFilter = "all" | "active" | "inactive" | "blocked";
+import {
+  getUsersPage,
+  type UsersQueryParams,
+  type UserStatusFilter,
+} from "./users-params";
 
-type UsersRow = {
+export type UsersRow = {
   id: string;
   name: string;
   profileImage: string | null;
@@ -32,11 +38,21 @@ type UsersRow = {
   phoneNumber: string;
   spacesCount: number;
   isActive: boolean;
-  phoneNumberConfirmed: boolean;
+  phoneNumberConfirmed?: boolean;
+};
+
+type UsersCounts = {
+  all: number;
+  active: number;
+  inactive: number;
+  blocked: number;
 };
 
 type UsersViewProps = {
   users: UsersRow[];
+  totalCount: number;
+  counts: UsersCounts;
+  params: UsersQueryParams;
 };
 
 function createCheckboxColumn(
@@ -72,66 +88,87 @@ function createCheckboxColumn(
   };
 }
 
-export default function UsersView({ users: initialUsers }: UsersViewProps) {
+const QUERY_KEYS = ["SearchTerm", "status", "SkipCount", "MaxResultCount", "Sorting"];
+
+export default function UsersView({
+  users: initialUsers,
+  totalCount,
+  counts,
+  params,
+}: UsersViewProps) {
   const t = useTranslations();
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+  const { changeQueries } = useQuery(QUERY_KEYS, true);
+  const [isPending, startTransition] = useTransition();
+
   const [users, setUsers] = useState<UsersRow[]>(initialUsers);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [userToDelete, setUserToDelete] = useState<UsersRow | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [statusUpdatingId, setStatusUpdatingId] = useState<string | null>(null);
+
+  const [searchInput, setSearchInput] = useState(params.SearchTerm);
 
   useEffect(() => {
     setUsers(initialUsers);
   }, [initialUsers]);
 
-  const activeCount = users.filter((user) => user.isActive).length;
-  const inactiveCount = users.filter((user) => !user.isActive).length;
-  const blockedCount = 0;
+  useEffect(() => {
+    setSearchInput(params.SearchTerm);
+  }, [params.SearchTerm]);
 
-  const filteredData = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInput === params.SearchTerm) return;
+      startTransition(() => {
+        changeQueries({
+          SearchTerm: searchInput.trim() || null,
+          SkipCount: "0",
+        });
+      });
+    }, 400);
 
-    return users.filter((user) => {
-      const userStatus: StatusFilter = user.isActive ? "active" : "inactive";
-      const matchesTab = statusFilter === "all" || userStatus === statusFilter;
-      const matchesSearch =
-        !query ||
-        user.name.toLowerCase().includes(query) ||
-        user.phoneNumber.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query);
+    return () => clearTimeout(timer);
+  }, [searchInput, params.SearchTerm, changeQueries]);
 
-      return matchesTab && matchesSearch;
+  const handleTabChange = (newStatus: UserStatusFilter) => {
+    if (params.status === newStatus) return;
+    startTransition(() => {
+      changeQueries({
+        status: newStatus === "all" ? null : newStatus,
+        SkipCount: "0",
+      });
     });
-  }, [users, statusFilter, searchQuery]);
+  };
 
   const tabs = [
     {
       label: t("Pages.Users.all"),
       value: "all" as const,
-      count: users.length,
+      count: counts.all,
       bgColor: "#1f2937",
       textColor: "#fff",
     },
     {
       label: t("Pages.Users.active"),
       value: "active" as const,
-      count: activeCount,
+      count: counts.active,
       bgColor: "#d1fae5",
       textColor: "#059669",
     },
     {
       label: t("Pages.Users.inactive"),
       value: "inactive" as const,
-      count: inactiveCount,
+      count: counts.inactive,
       bgColor: "#f3f4f6",
       textColor: "#6b7280",
     },
     {
       label: t("Pages.Users.blocked"),
       value: "blocked" as const,
-      count: blockedCount,
+      count: counts.blocked,
       bgColor: "#fee2e2",
       textColor: "#dc2626",
     },
@@ -151,24 +188,72 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
     const user = users.find((u) => u.id === id);
     if (!user) return;
     const newStatus = !user.isActive;
+
+    setStatusUpdatingId(id);
     try {
-      await editData<any, { isActive: boolean }>(
+      const response = await editData<any, { isActive: boolean }>(
         endpoints.users.update(id),
         "PUT",
         { isActive: newStatus }
       );
-      setUsers((current) =>
-        current.map((u) => (u.id === id ? { ...u, isActive: newStatus } : u))
-      );
-    } catch (ignore) {
-      // console.error("Failed to update user status", error);
+
+      if (response.success) {
+        enqueueSnackbar(
+          t("Global.Server.Success.var_updated", { var: t("Global.Label.status") }),
+          { variant: "success" }
+        );
+        setUsers((current) =>
+          current.map((u) => (u.id === id ? { ...u, isActive: newStatus } : u))
+        );
+        router.refresh();
+      } else {
+        enqueueSnackbar(response.error || t("Global.Server.unexpected_error"), {
+          variant: "error",
+        });
+      }
+    } catch (err: any) {
+      enqueueSnackbar(err?.message || t("Global.Server.unexpected_error"), {
+        variant: "error",
+      });
+    } finally {
+      setStatusUpdatingId(null);
     }
   };
 
-  const handleDeleteConfirm = () => {
-    if (userToDelete) {
-      setUsers((current) => current.filter((user) => user.id !== userToDelete.id));
+  const handleDeleteConfirm = async () => {
+    if (!userToDelete) return;
+    setIsDeleting(true);
+
+    try {
+      const response = await deleteData(endpoints.users.single(userToDelete.id));
+
+      if (response.success) {
+        enqueueSnackbar(
+          t("Global.Server.Success.var_deleted", {
+            var: userToDelete.name || t("Pages.Users.name"),
+          }),
+          { variant: "success" }
+        );
+        setUsers((current) => current.filter((u) => u.id !== userToDelete.id));
+        setOpenDeleteDialog(false);
+        setUserToDelete(null);
+        router.refresh();
+      } else {
+        enqueueSnackbar(response.error || t("Global.Server.unexpected_error"), {
+          variant: "error",
+        });
+      }
+    } catch (err: any) {
+      enqueueSnackbar(err?.message || t("Global.Server.unexpected_error"), {
+        variant: "error",
+      });
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const handleDeleteClose = () => {
+    if (isDeleting) return;
     setOpenDeleteDialog(false);
     setUserToDelete(null);
   };
@@ -178,7 +263,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
       selectedIds,
       toggleSelect,
       toggleSelectAll,
-      filteredData.map((row) => row.id)
+      users.map((row) => row.id)
     ),
     {
       id: "name",
@@ -198,7 +283,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
             src={row.profileImage ?? undefined}
             sx={{ width: 40, height: 40, bgcolor: "#E5E7EB", color: "#6B7280" }}
           >
-            {row.name.charAt(0)}
+            {row.name ? row.name.charAt(0) : "U"}
           </Avatar>
           <Typography sx={{ fontWeight: 600, fontSize: 15, color: "#111827" }}>
             {row.name}
@@ -215,6 +300,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
       width: "18%",
       renderCell: (row) => {
         const active = row.isActive;
+        const isUpdating = statusUpdatingId === row.id;
 
         return (
           <Box
@@ -238,6 +324,7 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
             <Switch
               size="small"
               checked={active}
+              disabled={isUpdating}
               onChange={() => handleStatusToggle(row.id)}
               sx={{
                 "& .MuiSwitch-track": {
@@ -275,8 +362,34 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
     },
   ];
 
+  const serverPagination = {
+    count: totalCount,
+    page: getUsersPage(params),
+    rowsPerPage: params.MaxResultCount,
+    onPageChange: (
+      _event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number
+    ) => {
+      startTransition(() => {
+        changeQueries({
+          SkipCount: String(newPage * params.MaxResultCount),
+        });
+      });
+    },
+    onRowsPerPageChange: (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      startTransition(() => {
+        changeQueries({
+          MaxResultCount: event.target.value,
+          SkipCount: "0",
+        });
+      });
+    },
+  };
+
   return (
-    <Box sx={{ textAlign: "right" }} dir="rtl">
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -331,19 +444,19 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
             {tabs.map((tab) => (
               <Button
                 key={tab.value}
-                onClick={() => setStatusFilter(tab.value)}
+                onClick={() => handleTabChange(tab.value)}
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
                   pb: 1,
                   px: 0,
-                  color: statusFilter === tab.value ? "#111827" : "#6b7280",
+                  color: params.status === tab.value ? "#111827" : "#6b7280",
                   fontWeight: 600,
                   textTransform: "none",
                   fontSize: "0.95rem",
                   borderBottom:
-                    statusFilter === tab.value ? "2px solid #111827" : "none",
+                    params.status === tab.value ? "2px solid #111827" : "none",
                   borderRadius: 0,
                   mb: "-1px",
                   whiteSpace: "nowrap",
@@ -370,8 +483,8 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
 
           <Box sx={{ pt: 3 }}>
             <TextField
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder={t("Global.Label.search")}
               size="small"
               fullWidth
@@ -399,19 +512,19 @@ export default function UsersView({ users: initialUsers }: UsersViewProps) {
         </Box>
 
         <SimpleTable<UsersRow>
-          data={filteredData}
+          data={users}
           headCells={tableHead}
           actions={actions}
+          loading={isPending}
+          serverPagination={serverPagination}
         />
       </Card>
 
       <DeleteDialog
         open={openDeleteDialog}
-        onClose={() => {
-          setOpenDeleteDialog(false);
-          setUserToDelete(null);
-        }}
+        onClose={handleDeleteClose}
         onConfirm={handleDeleteConfirm}
+        loading={isDeleting}
       />
     </Box>
   );
