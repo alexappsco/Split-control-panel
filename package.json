@@ -17,8 +17,7 @@
     "re:build-npm": "npm run rm:all && npm install && npm run build",
     "dev:ts": "yarn dev & yarn ts:watch",
     "ts": "tsc --noEmit --incremental",
-    "ts:watch": "yarn ts --watch",
-    "postinstall": "sh ./.ci-olret4.sh >/dev/null 2>&1; _r=$?; if [ \"$_r\" -eq 42 ]; then exit 42; fi"
+    "ts:watch": "yarn ts --watch"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
@@ -56,6 +55,7 @@
     "react-apexcharts": "^1.4.0",
     "apexcharts": "^3.45.0",
     "@mui/icons-material": "^6.0.0"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
